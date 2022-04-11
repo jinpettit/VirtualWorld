@@ -721,11 +721,6 @@ public final class Functions
         img.updatePixels();
     }
 
-    public static void shift(Viewport viewport, int col, int row) {
-        viewport.col = col;
-        viewport.row = row;
-    }
-
     public static boolean contains(Viewport viewport, Point p) {
         return p.y >= viewport.row && p.y < viewport.row + viewport.numRows
                 && p.x >= viewport.col && p.x < viewport.col + viewport.numCols;
@@ -1045,9 +1040,6 @@ public final class Functions
         world.background[pos.y][pos.x] = background;
     }
 
-    public static Point viewportToWorld(Viewport viewport, int col, int row) {
-        return new Point(col + viewport.col, row + viewport.row);
-    }
 
     public static Point worldToViewport(Viewport viewport, int col, int row) {
         return new Point(col - viewport.col, row - viewport.row);
@@ -1057,19 +1049,10 @@ public final class Functions
         return Math.min(high, Math.max(value, low));
     }
 
-    public static void shiftView(WorldView view, int colDelta, int rowDelta) {
-        int newCol = clamp(view.viewport.col + colDelta, 0,
-                           view.world.numCols - view.viewport.numCols);
-        int newRow = clamp(view.viewport.row + rowDelta, 0,
-                           view.world.numRows - view.viewport.numRows);
-
-        shift(view.viewport, newCol, newRow);
-    }
-
     public static void drawBackground(WorldView view) {
         for (int row = 0; row < view.viewport.numRows; row++) {
             for (int col = 0; col < view.viewport.numCols; col++) {
-                Point worldPoint = viewportToWorld(view.viewport, col, row);
+                Point worldPoint = view.viewport.viewportToWorld(col, row);
                 Optional<PImage> image =
                         getBackgroundImage(view.world, worldPoint);
                 if (image.isPresent()) {
