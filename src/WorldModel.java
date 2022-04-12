@@ -26,4 +26,8 @@ public final class WorldModel
             Arrays.fill(this.background[row], defaultBackground);
         }
     }
+    public boolean withinBounds(Point pos) {
+        return pos.y >= 0 && pos.y < numRows && pos.x >= 0
+                && pos.x < numCols;
+    }
 }

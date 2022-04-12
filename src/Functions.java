@@ -123,18 +123,6 @@ public final class Functions
         entity.imageIndex = (entity.imageIndex + 1) % entity.images.size();
     }
 
-    public static void executeAction(Action action, EventScheduler scheduler) {
-        switch (action.kind) {
-            case ACTIVITY:
-                executeActivityAction(action, scheduler);
-                break;
-
-            case ANIMATION:
-                executeAnimationAction(action, scheduler);
-                break;
-        }
-    }
-
     public static void executeAnimationAction(
             Action action, EventScheduler scheduler)
     {
@@ -647,7 +635,7 @@ public final class Functions
 
             removePendingEvent(scheduler, next);
 
-            executeAction(next.action, scheduler);
+            next.action.executeAction(scheduler);
         }
     }
 
@@ -900,15 +888,6 @@ public final class Functions
         addEntity(world, entity);
     }
 
-    public static boolean withinBounds(WorldModel world, Point pos) {
-        return pos.y >= 0 && pos.y < world.numRows && pos.x >= 0
-                && pos.x < world.numCols;
-    }
-
-    public static boolean isOccupied(WorldModel world, Point pos) {
-        return withinBounds(world, pos) && getOccupancyCell(world, pos) != null;
-    }
-
     public static Optional<Entity> nearestEntity(
             List<Entity> entities, Point pos)
     {
@@ -960,7 +939,7 @@ public final class Functions
        intended destination cell.
     */
     public static void addEntity(WorldModel world, Entity entity) {
-        if (withinBounds(world, entity.position)) {
+        if (world.withinBounds(entity.position)) {
             setOccupancyCell(world, entity.position, entity);
             world.entities.add(entity);
         }
@@ -968,7 +947,7 @@ public final class Functions
 
     public static void moveEntity(WorldModel world, Entity entity, Point pos) {
         Point oldPos = entity.position;
-        if (withinBounds(world, pos) && !pos.equals(oldPos)) {
+        if (world.withinBounds(pos) && !pos.equals(oldPos)) {
             setOccupancyCell(world, oldPos, null);
             removeEntityAt(world, pos);
             setOccupancyCell(world, pos, entity);
@@ -981,7 +960,7 @@ public final class Functions
     }
 
     public static void removeEntityAt(WorldModel world, Point pos) {
-        if (withinBounds(world, pos) && getOccupancyCell(world, pos) != null) {
+        if (world.withinBounds(pos) && getOccupancyCell(world, pos) != null) {
             Entity entity = getOccupancyCell(world, pos);
 
             /* This moves the entity just outside of the grid for
@@ -995,7 +974,7 @@ public final class Functions
     public static Optional<PImage> getBackgroundImage(
             WorldModel world, Point pos)
     {
-        if (withinBounds(world, pos)) {
+        if (world.withinBounds(pos)) {
             return Optional.of(getCurrentImage(getBackgroundCell(world, pos)));
         }
         else {
@@ -1003,10 +982,13 @@ public final class Functions
         }
     }
 
+    public static boolean isOccupied(WorldModel world, Point pos) {
+        return world.withinBounds(pos) && getOccupancyCell(world, pos) != null;
+    }
     public static void setBackground(
             WorldModel world, Point pos, Background background)
     {
-        if (withinBounds(world, pos)) {
+        if (world.withinBounds(pos)) {
             setBackgroundCell(world, pos, background);
         }
     }
