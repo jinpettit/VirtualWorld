@@ -44,4 +44,25 @@ public final class EventScheduler
             }
         }
     }
+
+    public void removePendingEvent(
+            Event event)
+    {
+        List<Event> pending = this.pendingEvents.get(event.entity);
+
+        if (pending != null) {
+            pending.remove(event);
+        }
+    }
+
+    public void updateOnTime(long time) {
+        while (!this.eventQueue.isEmpty()
+                && this.eventQueue.peek().time < time) {
+            Event next = this.eventQueue.poll();
+
+            removePendingEvent(next);
+
+            next.action.executeAction(this);
+        }
+    }
 }

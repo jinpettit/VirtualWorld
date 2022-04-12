@@ -94,27 +94,6 @@ public final class Functions
                         - min);
     }
 
-    public static void removePendingEvent(
-            EventScheduler scheduler, Event event)
-    {
-        List<Event> pending = scheduler.pendingEvents.get(event.entity);
-
-        if (pending != null) {
-            pending.remove(event);
-        }
-    }
-
-    public static void updateOnTime(EventScheduler scheduler, long time) {
-        while (!scheduler.eventQueue.isEmpty()
-                && scheduler.eventQueue.peek().time < time) {
-            Event next = scheduler.eventQueue.poll();
-
-            removePendingEvent(scheduler, next);
-
-            next.action.executeAction(scheduler);
-        }
-    }
-
     public static List<PImage> getImageList(ImageStore imageStore, String key) {
         return imageStore.images.getOrDefault(key, imageStore.defaultImages);
     }
