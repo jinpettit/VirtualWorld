@@ -183,11 +183,11 @@ public final class Entity
         int horiz = Integer.signum(destPos.x - this.position.x);
         Point newPos = new Point(this.position.x + horiz, this.position.y);
 
-        if (horiz == 0 || Functions.isOccupied(world, newPos)) {
+        if (horiz == 0 || world.isOccupied(newPos)) {
             int vert = Integer.signum(destPos.y - this.position.y);
             newPos = new Point(this.position.x, this.position.y + vert);
 
-            if (vert == 0 || Functions.isOccupied(world, newPos)) {
+            if (vert == 0 || world.isOccupied(newPos)) {
                 newPos = this.position;
             }
         }
@@ -201,11 +201,11 @@ public final class Entity
         int horiz = Integer.signum(destPos.x - this.position.x);
         Point newPos = new Point(this.position.x + horiz, this.position.y);
 
-        if (horiz == 0 || Functions.isOccupied(world, newPos) && Functions.getOccupancyCell(world, newPos).kind != EntityKind.STUMP) {
+        if (horiz == 0 || world.isOccupied(newPos) && world.getOccupancyCell(newPos).kind != EntityKind.STUMP) {
             int vert = Integer.signum(destPos.y - this.position.y);
             newPos = new Point(this.position.x, this.position.y + vert);
 
-            if (vert == 0 || Functions.isOccupied(world, newPos) &&  Functions.getOccupancyCell(world, newPos).kind != EntityKind.STUMP) {
+            if (vert == 0 || world.isOccupied(newPos) &&  world.getOccupancyCell(newPos).kind != EntityKind.STUMP) {
                 newPos = this.position;
             }
         }
@@ -389,7 +389,7 @@ public final class Entity
             Point nextPos = this.nextPositionFairy(world, target.position);
 
             if (!this.position.equals(nextPos)) {
-                Optional<Entity> occupant = Functions.getOccupant(world, nextPos);
+                Optional<Entity> occupant = world.getOccupant(nextPos);
                 if (occupant.isPresent()) {
                     scheduler.unscheduleAllEvents(occupant.get());
                 }
@@ -414,7 +414,7 @@ public final class Entity
             Point nextPos = this.nextPositionDude(world, target.position);
 
             if (!this.position.equals(nextPos)) {
-                Optional<Entity> occupant = Functions.getOccupant(world, nextPos);
+                Optional<Entity> occupant = world.getOccupant(nextPos);
                 if (occupant.isPresent()) {
                     scheduler.unscheduleAllEvents(occupant.get());
                 }
@@ -437,7 +437,7 @@ public final class Entity
             Point nextPos = this.nextPositionDude(world, target.position);
 
             if (!this.position.equals(nextPos)) {
-                Optional<Entity> occupant = Functions.getOccupant(world, nextPos);
+                Optional<Entity> occupant = world.getOccupant(nextPos);
                 if (occupant.isPresent()) {
                     scheduler.unscheduleAllEvents(occupant.get());
                 }

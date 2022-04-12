@@ -1,3 +1,5 @@
+import processing.core.PImage;
+
 import java.util.*;
 
 /**
@@ -30,13 +32,13 @@ public final class WorldModel
     }
     public void addEntity(Entity entity) {
         if (withinBounds(entity.position)) {
-            Functions.setOccupancyCell(this, entity.position, entity);
+            this.setOccupancyCell(entity.position, entity);
             entities.add(entity);
         }
     }
 
     public void tryAddEntity(Entity entity) {
-        if (Functions.isOccupied(this, entity.position)) {
+        if (this.isOccupied(entity.position)) {
             // arguably the wrong type of exception, but we are not
             // defining our own exceptions yet
             throw new IllegalArgumentException("position occupied");
@@ -90,9 +92,9 @@ public final class WorldModel
     public void moveEntity(Entity entity, Point pos) {
         Point oldPos = entity.position;
         if (this.withinBounds(pos) && !pos.equals(oldPos)) {
-            Functions.setOccupancyCell(this, oldPos, null);
+            setOccupancyCell(oldPos, null);
             removeEntityAt(pos);
-            Functions.setOccupancyCell(this, pos, entity);
+            setOccupancyCell(pos, entity);
             entity.position = pos;
         }
     }
@@ -102,14 +104,65 @@ public final class WorldModel
     }
 
     public void removeEntityAt(Point pos) {
-        if (this.withinBounds(pos) && Functions.getOccupancyCell(this, pos) != null) {
-            Entity entity = Functions.getOccupancyCell(this, pos);
+        if (this.withinBounds(pos) && getOccupancyCell(pos) != null) {
+            Entity entity = getOccupancyCell(pos);
 
             /* This moves the entity just outside of the grid for
              * debugging purposes. */
             entity.position = new Point(-1, -1);
             this.entities.remove(entity);
-            Functions.setOccupancyCell(this, pos, null);
+            setOccupancyCell(pos, null);
         }
+    }
+
+    public Optional<PImage> getBackgroundImage(
+            Point pos)
+    {
+        if (this.withinBounds(pos)) {
+            return Optional.of(getBackgroundCell(pos).getCurrentImage());
+        }
+        else {
+            return Optional.empty();
+        }
+    }
+
+    public boolean isOccupied(Point pos) {
+        return this.withinBounds(pos) && getOccupancyCell(pos) != null;
+    }
+    public void setBackground(
+            Point pos, Background background)
+    {
+        if (this.withinBounds(pos)) {
+            setBackgroundCell(pos, background);
+        }
+    }
+
+    public Optional<Entity> getOccupant(Point pos) {
+        if (isOccupied(pos)) {
+            return Optional.of(getOccupancyCell(pos));
+        }
+        else {
+            return Optional.empty();
+        }
+    }
+
+    public Entity getOccupancyCell(Point pos) {
+        return this.occupancy[pos.y][pos.x];
+    }
+
+    public void setOccupancyCell(
+            Point pos, Entity entity)
+    {
+        this.occupancy[pos.y][pos.x] = entity;
+    }
+
+    public Background getBackgroundCell(Point pos) {
+        return this.background[pos.y][pos.x];
+    }
+
+    public void setBackgroundCell(
+            Point pos, Background background)
+    {
+        this.background[pos.y][pos.x] = background;
     }
 }
