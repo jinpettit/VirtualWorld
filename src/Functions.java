@@ -217,7 +217,7 @@ public final class Functions
             int health = Integer.parseInt(properties[SAPLING_HEALTH]);
             Entity entity = new Entity(EntityKind.SAPLING, id, pt, imageStore.getImageList(SAPLING_KEY), 0, 0,
                     SAPLING_ACTION_ANIMATION_PERIOD, SAPLING_ACTION_ANIMATION_PERIOD, health, SAPLING_HEALTH_LIMIT);
-            tryAddEntity(world, entity);
+            world.tryAddEntity(entity);
         }
 
         return properties.length == SAPLING_NUM_PROPERTIES;
@@ -235,7 +235,7 @@ public final class Functions
                     Integer.parseInt(properties[DUDE_ANIMATION_PERIOD]),
                     Integer.parseInt(properties[DUDE_LIMIT]),
                     imageStore.getImageList(DUDE_KEY));
-            tryAddEntity(world, entity);
+            world.tryAddEntity(entity);
         }
 
         return properties.length == DUDE_NUM_PROPERTIES;
@@ -252,7 +252,7 @@ public final class Functions
                     Integer.parseInt(properties[FAIRY_ACTION_PERIOD]),
                     Integer.parseInt(properties[FAIRY_ANIMATION_PERIOD]),
                     imageStore.getImageList(FAIRY_KEY));
-            tryAddEntity(world, entity);
+            world.tryAddEntity(entity);
         }
 
         return properties.length == FAIRY_NUM_PROPERTIES;
@@ -270,7 +270,7 @@ public final class Functions
                                         Integer.parseInt(properties[TREE_ANIMATION_PERIOD]),
                                          Integer.parseInt(properties[TREE_HEALTH]),
                     imageStore.getImageList(TREE_KEY));
-            tryAddEntity(world, entity);
+            world.tryAddEntity(entity);
         }
 
         return properties.length == TREE_NUM_PROPERTIES;
@@ -286,7 +286,7 @@ public final class Functions
                     Integer.parseInt(properties[OBSTACLE_ANIMATION_PERIOD]),
                     imageStore.getImageList(
                                                         OBSTACLE_KEY));
-            tryAddEntity(world, entity);
+            world.tryAddEntity(entity);
         }
 
         return properties.length == OBSTACLE_NUM_PROPERTIES;
@@ -301,43 +301,10 @@ public final class Functions
             Entity entity = createHouse(properties[HOUSE_ID], pt,
                     imageStore.getImageList(
                                                           HOUSE_KEY));
-            tryAddEntity(world, entity);
+            world.tryAddEntity(entity);
         }
 
         return properties.length == HOUSE_NUM_PROPERTIES;
-    }
-
-    public static void tryAddEntity(WorldModel world, Entity entity) {
-        if (isOccupied(world, entity.position)) {
-            // arguably the wrong type of exception, but we are not
-            // defining our own exceptions yet
-            throw new IllegalArgumentException("position occupied");
-        }
-
-        world.addEntity(entity);
-    }
-
-    public static Optional<Entity> nearestEntity(
-            List<Entity> entities, Point pos)
-    {
-        if (entities.isEmpty()) {
-            return Optional.empty();
-        }
-        else {
-            Entity nearest = entities.get(0);
-            int nearestDistance = distanceSquared(nearest.position, pos);
-
-            for (Entity other : entities) {
-                int otherDistance = distanceSquared(other.position, pos);
-
-                if (otherDistance < nearestDistance) {
-                    nearest = other;
-                    nearestDistance = otherDistance;
-                }
-            }
-
-            return Optional.of(nearest);
-        }
     }
 
     public static int distanceSquared(Point p1, Point p2) {
@@ -345,53 +312,6 @@ public final class Functions
         int deltaY = p1.y - p2.y;
 
         return deltaX * deltaX + deltaY * deltaY;
-    }
-
-    public static Optional<Entity> findNearest(
-            WorldModel world, Point pos, List<EntityKind> kinds)
-    {
-        List<Entity> ofType = new LinkedList<>();
-        for (EntityKind kind: kinds)
-        {
-            for (Entity entity : world.entities) {
-                if (entity.kind == kind) {
-                    ofType.add(entity);
-                }
-            }
-        }
-
-        return nearestEntity(ofType, pos);
-    }
-
-    /*
-       Assumes that there is no entity currently occupying the
-       intended destination cell.
-    */
-
-    public static void moveEntity(WorldModel world, Entity entity, Point pos) {
-        Point oldPos = entity.position;
-        if (world.withinBounds(pos) && !pos.equals(oldPos)) {
-            setOccupancyCell(world, oldPos, null);
-            removeEntityAt(world, pos);
-            setOccupancyCell(world, pos, entity);
-            entity.position = pos;
-        }
-    }
-
-    public static void removeEntity(WorldModel world, Entity entity) {
-        removeEntityAt(world, entity.position);
-    }
-
-    public static void removeEntityAt(WorldModel world, Point pos) {
-        if (world.withinBounds(pos) && getOccupancyCell(world, pos) != null) {
-            Entity entity = getOccupancyCell(world, pos);
-
-            /* This moves the entity just outside of the grid for
-             * debugging purposes. */
-            entity.position = new Point(-1, -1);
-            world.entities.remove(entity);
-            setOccupancyCell(world, pos, null);
-        }
     }
 
     public static Optional<PImage> getBackgroundImage(

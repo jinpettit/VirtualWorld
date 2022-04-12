@@ -78,7 +78,7 @@ public final class Entity
             EventScheduler scheduler)
     {
         Optional<Entity> fairyTarget =
-                Functions.findNearest(world, this.position, new ArrayList<>(Arrays.asList(EntityKind.STUMP)));
+        world.findNearest( this.position, new ArrayList<>(Arrays.asList(EntityKind.STUMP)));
 
         if (fairyTarget.isPresent()) {
             Point tgtPos = fairyTarget.get().position;
@@ -103,7 +103,7 @@ public final class Entity
             EventScheduler scheduler)
     {
         Optional<Entity> target =
-                Functions.findNearest(world, this.position, new ArrayList<>(Arrays.asList(EntityKind.TREE, EntityKind.SAPLING)));
+        world.findNearest(this.position, new ArrayList<>(Arrays.asList(EntityKind.TREE, EntityKind.SAPLING)));
 
         if (!target.isPresent() || !moveToNotFull(world,
                 target.get(),
@@ -122,7 +122,7 @@ public final class Entity
             EventScheduler scheduler)
     {
         Optional<Entity> fullTarget =
-                Functions.findNearest(world, this.position, new ArrayList<>(Arrays.asList(EntityKind.HOUSE)));
+        world.findNearest(this.position, new ArrayList<>(Arrays.asList(EntityKind.HOUSE)));
 
         if (fullTarget.isPresent() && moveToFull(world,
                 fullTarget.get(), scheduler))
@@ -147,7 +147,7 @@ public final class Entity
                     this.resourceLimit,
                     this.images);
 
-            Functions.removeEntity(world, this);
+            world.removeEntity(this);
             scheduler.unscheduleAllEvents(this);
 
             world.addEntity(miner);
@@ -170,7 +170,7 @@ public final class Entity
                 this.resourceLimit,
                 this.images);
 
-        Functions.removeEntity(world, this);
+        world.removeEntity(this);
         scheduler.unscheduleAllEvents(this);
 
         world.addEntity(miner);
@@ -324,7 +324,7 @@ public final class Entity
                     this.position,
                     imageStore.getImageList(Functions.STUMP_KEY));
 
-            Functions.removeEntity(world, this);
+            world.removeEntity(this);
             scheduler.unscheduleAllEvents(this);
 
             world.addEntity(stump);
@@ -346,7 +346,7 @@ public final class Entity
                     this.position,
                     imageStore.getImageList(Functions.STUMP_KEY));
 
-            Functions.removeEntity(world, this);
+            world.removeEntity(this);
             scheduler.unscheduleAllEvents(this);
 
             world.addEntity(stump);
@@ -363,7 +363,7 @@ public final class Entity
                     Functions.getNumFromRange(Functions.TREE_HEALTH_MAX, Functions.TREE_HEALTH_MIN),
                     imageStore.getImageList(Functions.TREE_KEY));
 
-            Functions.removeEntity(world, this);
+            world.removeEntity(this);
             scheduler.unscheduleAllEvents(this);
 
             world.addEntity(tree);
@@ -381,7 +381,7 @@ public final class Entity
             EventScheduler scheduler)
     {
         if (this.position.adjacent(target.position)) {
-            Functions.removeEntity(world, target);
+            world.removeEntity(target);
             scheduler.unscheduleAllEvents(target);
             return true;
         }
@@ -394,7 +394,7 @@ public final class Entity
                     scheduler.unscheduleAllEvents(occupant.get());
                 }
 
-                Functions.moveEntity(world, this, nextPos);
+                world.moveEntity(this, nextPos);
             }
             return false;
         }
@@ -419,7 +419,7 @@ public final class Entity
                     scheduler.unscheduleAllEvents(occupant.get());
                 }
 
-                Functions.moveEntity(world, this, nextPos);
+                world.moveEntity(this, nextPos);
             }
             return false;
         }
@@ -442,7 +442,7 @@ public final class Entity
                     scheduler.unscheduleAllEvents(occupant.get());
                 }
 
-                Functions.moveEntity(world, this, nextPos);
+                world.moveEntity(this, nextPos);
             }
             return false;
         }

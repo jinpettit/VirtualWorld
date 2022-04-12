@@ -1,6 +1,4 @@
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Represents the 2D World in which this simulation is running.
@@ -34,6 +32,84 @@ public final class WorldModel
         if (withinBounds(entity.position)) {
             Functions.setOccupancyCell(this, entity.position, entity);
             entities.add(entity);
+        }
+    }
+
+    public void tryAddEntity(Entity entity) {
+        if (Functions.isOccupied(this, entity.position)) {
+            // arguably the wrong type of exception, but we are not
+            // defining our own exceptions yet
+            throw new IllegalArgumentException("position occupied");
+        }
+
+        this.addEntity(entity);
+    }
+    public Optional<Entity> nearestEntity(
+            List<Entity> entities, Point pos)
+    {
+        if (entities.isEmpty()) {
+            return Optional.empty();
+        }
+        else {
+            Entity nearest = entities.get(0);
+            int nearestDistance = Functions.distanceSquared(nearest.position, pos);
+
+            for (Entity other : entities) {
+                int otherDistance = Functions.distanceSquared(other.position, pos);
+
+                if (otherDistance < nearestDistance) {
+                    nearest = other;
+                    nearestDistance = otherDistance;
+                }
+            }
+
+            return Optional.of(nearest);
+        }
+    }
+    public Optional<Entity> findNearest(
+             Point pos, List<EntityKind> kinds)
+    {
+        List<Entity> ofType = new LinkedList<>();
+        for (EntityKind kind: kinds)
+        {
+            for (Entity entity : this.entities) {
+                if (entity.kind == kind) {
+                    ofType.add(entity);
+                }
+            }
+        }
+
+        return this.nearestEntity(ofType, pos);
+    }
+
+        /*
+       Assumes that there is no entity currently occupying the
+       intended destination cell.
+    */
+
+    public void moveEntity(Entity entity, Point pos) {
+        Point oldPos = entity.position;
+        if (this.withinBounds(pos) && !pos.equals(oldPos)) {
+            Functions.setOccupancyCell(this, oldPos, null);
+            removeEntityAt(pos);
+            Functions.setOccupancyCell(this, pos, entity);
+            entity.position = pos;
+        }
+    }
+
+    public void removeEntity(Entity entity) {
+        removeEntityAt(entity.position);
+    }
+
+    public void removeEntityAt(Point pos) {
+        if (this.withinBounds(pos) && Functions.getOccupancyCell(this, pos) != null) {
+            Entity entity = Functions.getOccupancyCell(this, pos);
+
+            /* This moves the entity just outside of the grid for
+             * debugging purposes. */
+            entity.position = new Point(-1, -1);
+            this.entities.remove(entity);
+            Functions.setOccupancyCell(this, pos, null);
         }
     }
 }
