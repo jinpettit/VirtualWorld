@@ -236,51 +236,6 @@ public final class Functions
         }
     }
 
-    public static boolean transformNotFull(
-            Entity entity,
-            WorldModel world,
-            EventScheduler scheduler,
-            ImageStore imageStore)
-    {
-        if (entity.resourceCount >= entity.resourceLimit) {
-            Entity miner = createDudeFull(entity.id,
-                    entity.position, entity.actionPeriod,
-                    entity.animationPeriod,
-                    entity.resourceLimit,
-                    entity.images);
-
-            removeEntity(world, entity);
-            unscheduleAllEvents(scheduler, entity);
-
-            addEntity(world, miner);
-            scheduleActions(miner, scheduler, world, imageStore);
-
-            return true;
-        }
-
-        return false;
-    }
-
-    public static void transformFull(
-            Entity entity,
-            WorldModel world,
-            EventScheduler scheduler,
-            ImageStore imageStore)
-    {
-        Entity miner = createDudeNotFull(entity.id,
-                entity.position, entity.actionPeriod,
-                entity.animationPeriod,
-                entity.resourceLimit,
-                entity.images);
-
-        removeEntity(world, entity);
-        unscheduleAllEvents(scheduler, entity);
-
-        addEntity(world, miner);
-        scheduleActions(miner, scheduler, world, imageStore);
-    }
-
-
     public static boolean transformPlant( Entity entity,
                                           WorldModel world,
                                           EventScheduler scheduler,

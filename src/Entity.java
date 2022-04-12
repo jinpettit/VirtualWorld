@@ -108,7 +108,7 @@ public final class Entity
         if (!target.isPresent() || !Functions.moveToNotFull(this, world,
                 target.get(),
                 scheduler)
-                || !Functions.transformNotFull(this, world, scheduler, imageStore))
+                || !transformNotFull(world, scheduler, imageStore))
         {
             Functions.scheduleEvent(scheduler, this,
                     Functions.createActivityAction(this, world, imageStore),
@@ -127,12 +127,53 @@ public final class Entity
         if (fullTarget.isPresent() && Functions.moveToFull(this, world,
                 fullTarget.get(), scheduler))
         {
-            Functions.transformFull(this, world, scheduler, imageStore);
+            transformFull(world, scheduler, imageStore);
         }
         else {
             Functions.scheduleEvent(scheduler, this,
                     Functions.createActivityAction(this, world, imageStore),
                     actionPeriod);
         }
+    }
+    public boolean transformNotFull(
+            WorldModel world,
+            EventScheduler scheduler,
+            ImageStore imageStore)
+    {
+        if (resourceCount >= resourceLimit) {
+            Entity miner = Functions.createDudeFull(id,
+                    position, actionPeriod,
+                    animationPeriod,
+                    resourceLimit,
+                    images);
+
+            Functions.removeEntity(world, this);
+            Functions.unscheduleAllEvents(scheduler, this);
+
+            Functions.addEntity(world, miner);
+            Functions.scheduleActions(miner, scheduler, world, imageStore);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public void transformFull(
+            WorldModel world,
+            EventScheduler scheduler,
+            ImageStore imageStore)
+    {
+        Entity miner = Functions.createDudeNotFull(id,
+                position, actionPeriod,
+                animationPeriod,
+                resourceLimit,
+                images);
+
+        Functions.removeEntity(world, this);
+        Functions.unscheduleAllEvents(scheduler, this);
+
+        Functions.addEntity(world, miner);
+        Functions.scheduleActions(miner, scheduler, world, imageStore);
     }
 }
