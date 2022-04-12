@@ -1,13 +1,29 @@
-public final class Viewport
+final class Viewport
 {
-    public int row;
-    public int col;
-    public int numRows;
-    public int numCols;
+    private int row;
+    private int col;
+    private final int numRows;
+    private final int numCols;
 
     public Viewport(int numRows, int numCols) {
         this.numRows = numRows;
         this.numCols = numCols;
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    public int getCol() {
+        return col;
+    }
+
+    public int getNumRows() {
+        return numRows;
+    }
+
+    public int getNumCols() {
+        return numCols;
     }
 
     public Point viewportToWorld(int col, int row) {

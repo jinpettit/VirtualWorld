@@ -37,10 +37,10 @@ public final class VirtualWorld extends PApplet
 
     public static double timeScale = 1.0;
 
-    public ImageStore imageStore;
-    public WorldModel world;
-    public WorldView view;
-    public EventScheduler scheduler;
+    private ImageStore imageStore;
+    private WorldModel world;
+    private WorldView view;
+    private EventScheduler scheduler;
 
     public long nextTime;
 
