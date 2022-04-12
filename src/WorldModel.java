@@ -7,7 +7,7 @@ import java.util.*;
  * Keeps track of the size of the world, the background image for each
  * location in the world, and the entities that populate the world.
  */
-public final class WorldModel {
+final class WorldModel {
 
     private int numRows;
     private int numCols;
@@ -66,10 +66,10 @@ public final class WorldModel {
         }
         else {
             Entity nearest = entities.get(0);
-            int nearestDistance = Functions.distanceSquared(nearest.position, pos);
+            int nearestDistance = nearest.position.distanceSquared(pos);
 
             for (Entity other : entities) {
-                int otherDistance = Functions.distanceSquared(other.position, pos);
+                int otherDistance = other.position.distanceSquared(pos);
 
                 if (otherDistance < nearestDistance) {
                     nearest = other;

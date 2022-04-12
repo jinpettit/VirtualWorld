@@ -307,13 +307,6 @@ public final class Functions
         return properties.length == HOUSE_NUM_PROPERTIES;
     }
 
-    public static int distanceSquared(Point p1, Point p2) {
-        int deltaX = p1.x - p2.x;
-        int deltaY = p1.y - p2.y;
-
-        return deltaX * deltaX + deltaY * deltaY;
-    }
-
     public static int clamp(int value, int low, int high) {
         return Math.min(high, Math.max(value, low));
     }
