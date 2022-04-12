@@ -142,27 +142,27 @@ public final class Functions
     {
         switch (action.entity.kind) {
             case SAPLING:
-                executeSaplingActivity(action.entity, action.world,
+                action.entity.executeSaplingActivity(action.world,
                                          action.imageStore, scheduler);
                 break;
 
             case TREE:
-                executeTreeActivity(action.entity, action.world,
+                action.entity.executeTreeActivity(action.world,
                                             action.imageStore, scheduler);
                 break;
 
             case FAIRY:
-                executeFairyActivity(action.entity, action.world,
+                action.entity.executeFairyActivity(action.world,
                                    action.imageStore, scheduler);
                 break;
 
             case DUDE_NOT_FULL:
-                executeDudeNotFullActivity(action.entity, action.world,
+                action.entity.executeDudeNotFullActivity(action.world,
                                        action.imageStore, scheduler);
                 break;
 
             case DUDE_FULL:
-                executeDudeFullActivity(action.entity, action.world,
+                action.entity.executeDudeFullActivity(action.world,
                                      action.imageStore, scheduler);
                 break;
 
@@ -170,103 +170,6 @@ public final class Functions
                 throw new UnsupportedOperationException(String.format(
                         "executeActivityAction not supported for %s",
                         action.entity.kind));
-        }
-    }
-
-    public static void executeSaplingActivity(
-            Entity entity,
-            WorldModel world,
-            ImageStore imageStore,
-            EventScheduler scheduler)
-    {
-        entity.health++;
-        if (!transformPlant(entity, world, scheduler, imageStore))
-        {
-            scheduleEvent(scheduler, entity,
-                    createActivityAction(entity, world, imageStore),
-                    entity.actionPeriod);
-        }
-    }
-
-    public static void executeTreeActivity(
-            Entity entity,
-            WorldModel world,
-            ImageStore imageStore,
-            EventScheduler scheduler)
-    {
-
-        if (!transformPlant(entity, world, scheduler, imageStore)) {
-
-            scheduleEvent(scheduler, entity,
-                    createActivityAction(entity, world, imageStore),
-                    entity.actionPeriod);
-        }
-    }
-
-    public static void executeFairyActivity(
-            Entity entity,
-            WorldModel world,
-            ImageStore imageStore,
-            EventScheduler scheduler)
-    {
-        Optional<Entity> fairyTarget =
-                findNearest(world, entity.position, new ArrayList<>(Arrays.asList(EntityKind.STUMP)));
-
-        if (fairyTarget.isPresent()) {
-            Point tgtPos = fairyTarget.get().position;
-
-            if (moveToFairy(entity, world, fairyTarget.get(), scheduler)) {
-                Entity sapling = createSapling("sapling_" + entity.id, tgtPos,
-                        getImageList(imageStore, SAPLING_KEY));
-
-                addEntity(world, sapling);
-                scheduleActions(sapling, scheduler, world, imageStore);
-            }
-        }
-
-        scheduleEvent(scheduler, entity,
-                createActivityAction(entity, world, imageStore),
-                entity.actionPeriod);
-    }
-
-    public static void executeDudeNotFullActivity(
-            Entity entity,
-            WorldModel world,
-            ImageStore imageStore,
-            EventScheduler scheduler)
-    {
-        Optional<Entity> target =
-                findNearest(world, entity.position, new ArrayList<>(Arrays.asList(EntityKind.TREE, EntityKind.SAPLING)));
-
-        if (!target.isPresent() || !moveToNotFull(entity, world,
-                target.get(),
-                scheduler)
-                || !transformNotFull(entity, world, scheduler, imageStore))
-        {
-            scheduleEvent(scheduler, entity,
-                    createActivityAction(entity, world, imageStore),
-                    entity.actionPeriod);
-        }
-    }
-
-    public static void executeDudeFullActivity(
-            Entity entity,
-            WorldModel world,
-            ImageStore imageStore,
-            EventScheduler scheduler)
-    {
-        Optional<Entity> fullTarget =
-                findNearest(world, entity.position, new ArrayList<>(Arrays.asList(EntityKind.HOUSE)));
-
-        if (fullTarget.isPresent() && moveToFull(entity, world,
-                fullTarget.get(), scheduler))
-        {
-            transformFull(entity, world, scheduler, imageStore);
-        }
-        else {
-            scheduleEvent(scheduler, entity,
-                    createActivityAction(entity, world, imageStore),
-                    entity.actionPeriod);
         }
     }
 
