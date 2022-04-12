@@ -52,7 +52,7 @@ public final class Entity
         this.health++;
         if (!transformPlant(world, scheduler, imageStore))
         {
-            Functions.scheduleEvent(scheduler, this,
+            scheduler.scheduleEvent(this,
                     Functions.createActivityAction(this, world, imageStore),
                     this.actionPeriod);
         }
@@ -66,7 +66,7 @@ public final class Entity
 
         if (!transformPlant(world, scheduler, imageStore)) {
 
-            Functions.scheduleEvent(scheduler, this,
+            scheduler.scheduleEvent(this,
                     Functions.createActivityAction(this, world, imageStore),
                     this.actionPeriod);
         }
@@ -92,7 +92,7 @@ public final class Entity
             }
         }
 
-        Functions.scheduleEvent(scheduler, this,
+        scheduler.scheduleEvent(this,
                 Functions.createActivityAction(this, world, imageStore),
                 this.actionPeriod);
     }
@@ -110,7 +110,7 @@ public final class Entity
                 scheduler)
                 || !transformNotFull(world, scheduler, imageStore))
         {
-            Functions.scheduleEvent(scheduler, this,
+            scheduler.scheduleEvent(this,
                     Functions.createActivityAction(this, world, imageStore),
                     this.actionPeriod);
         }
@@ -130,7 +130,7 @@ public final class Entity
             transformFull(world, scheduler, imageStore);
         }
         else {
-            Functions.scheduleEvent(scheduler, this,
+            scheduler.scheduleEvent(this,
                     Functions.createActivityAction(this, world, imageStore),
                     this.actionPeriod);
         }
@@ -148,7 +148,7 @@ public final class Entity
                     this.images);
 
             Functions.removeEntity(world, this);
-            Functions.unscheduleAllEvents(scheduler, this);
+            scheduler.unscheduleAllEvents(this);
 
             world.addEntity(miner);
             miner.scheduleActions(scheduler, world, imageStore);
@@ -171,7 +171,7 @@ public final class Entity
                 this.images);
 
         Functions.removeEntity(world, this);
-        Functions.unscheduleAllEvents(scheduler, this);
+        scheduler.unscheduleAllEvents(this);
 
         world.addEntity(miner);
         miner.scheduleActions(scheduler, world, imageStore);
@@ -219,52 +219,52 @@ public final class Entity
     {
         switch (this.kind) {
             case DUDE_FULL:
-                Functions.scheduleEvent(scheduler, this,
+                scheduler.scheduleEvent(this,
                         Functions.createActivityAction(this, world, imageStore),
                         this.actionPeriod);
-                Functions.scheduleEvent(scheduler, this,
+                scheduler.scheduleEvent(this,
                         Functions.createAnimationAction(this, 0),
                         getAnimationPeriod());
                 break;
 
             case DUDE_NOT_FULL:
-                Functions.scheduleEvent(scheduler, this,
+                scheduler.scheduleEvent(this,
                         Functions.createActivityAction(this, world, imageStore),
                         this.actionPeriod);
-                Functions.scheduleEvent(scheduler, this,
+                scheduler.scheduleEvent(this,
                         Functions.createAnimationAction(this, 0),
                         getAnimationPeriod());
                 break;
 
             case OBSTACLE:
-                Functions.scheduleEvent(scheduler, this,
+                scheduler.scheduleEvent(this,
                         Functions.createAnimationAction(this, 0),
                         getAnimationPeriod());
                 break;
 
             case FAIRY:
-                Functions.scheduleEvent(scheduler, this,
+                scheduler.scheduleEvent(this,
                         Functions.createActivityAction(this, world, imageStore),
                         this.actionPeriod);
-                Functions.scheduleEvent(scheduler, this,
+                scheduler.scheduleEvent(this,
                         Functions.createAnimationAction(this, 0),
                         getAnimationPeriod());
                 break;
 
             case SAPLING:
-                Functions.scheduleEvent(scheduler, this,
+                scheduler.scheduleEvent(this,
                         Functions.createActivityAction(this, world, imageStore),
                         this.actionPeriod);
-                Functions.scheduleEvent(scheduler, this,
+                scheduler.scheduleEvent(this,
                         Functions.createAnimationAction(this, 0),
                         getAnimationPeriod());
                 break;
 
             case TREE:
-                Functions.scheduleEvent(scheduler, this,
+                scheduler.scheduleEvent(this,
                         Functions.createActivityAction(this, world, imageStore),
                         this.actionPeriod);
-                Functions.scheduleEvent(scheduler, this,
+                scheduler.scheduleEvent(this,
                         Functions.createAnimationAction(this, 0),
                         getAnimationPeriod());
                 break;
@@ -325,7 +325,7 @@ public final class Entity
                     Functions.getImageList(imageStore, Functions.STUMP_KEY));
 
             Functions.removeEntity(world, this);
-            Functions.unscheduleAllEvents(scheduler, this);
+            scheduler.unscheduleAllEvents(this);
 
             world.addEntity(stump);
             stump.scheduleActions(scheduler, world, imageStore);
@@ -347,7 +347,7 @@ public final class Entity
                     Functions.getImageList(imageStore, Functions.STUMP_KEY));
 
             Functions.removeEntity(world, this);
-            Functions.unscheduleAllEvents(scheduler, this);
+            scheduler.unscheduleAllEvents(this);
 
             world.addEntity(stump);
             stump.scheduleActions(scheduler, world, imageStore);
@@ -364,7 +364,7 @@ public final class Entity
                     Functions.getImageList(imageStore, Functions.TREE_KEY));
 
             Functions.removeEntity(world, this);
-            Functions.unscheduleAllEvents(scheduler, this);
+            scheduler.unscheduleAllEvents(this);
 
             world.addEntity(tree);
             tree.scheduleActions(scheduler, world, imageStore);
@@ -382,7 +382,7 @@ public final class Entity
     {
         if (this.position.adjacent(target.position)) {
             Functions.removeEntity(world, target);
-            Functions.unscheduleAllEvents(scheduler, target);
+            scheduler.unscheduleAllEvents(target);
             return true;
         }
         else {
@@ -391,7 +391,7 @@ public final class Entity
             if (!this.position.equals(nextPos)) {
                 Optional<Entity> occupant = Functions.getOccupant(world, nextPos);
                 if (occupant.isPresent()) {
-                    Functions.unscheduleAllEvents(scheduler, occupant.get());
+                    scheduler.unscheduleAllEvents(occupant.get());
                 }
 
                 Functions.moveEntity(world, this, nextPos);
@@ -416,7 +416,7 @@ public final class Entity
             if (!this.position.equals(nextPos)) {
                 Optional<Entity> occupant = Functions.getOccupant(world, nextPos);
                 if (occupant.isPresent()) {
-                    Functions.unscheduleAllEvents(scheduler, occupant.get());
+                    scheduler.unscheduleAllEvents(occupant.get());
                 }
 
                 Functions.moveEntity(world, this, nextPos);
@@ -439,7 +439,7 @@ public final class Entity
             if (!this.position.equals(nextPos)) {
                 Optional<Entity> occupant = Functions.getOccupant(world, nextPos);
                 if (occupant.isPresent()) {
-                    Functions.unscheduleAllEvents(scheduler, occupant.get());
+                    scheduler.unscheduleAllEvents(occupant.get());
                 }
 
                 Functions.moveEntity(world, this, nextPos);

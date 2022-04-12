@@ -94,37 +94,6 @@ public final class Functions
                         - min);
     }
 
-    public static void scheduleEvent(
-            EventScheduler scheduler,
-            Entity entity,
-            Action action,
-            long afterPeriod)
-    {
-        long time = System.currentTimeMillis() + (long)(afterPeriod
-                * scheduler.timeScale);
-        Event event = new Event(action, time, entity);
-
-        scheduler.eventQueue.add(event);
-
-        // update list of pending events for the given entity
-        List<Event> pending = scheduler.pendingEvents.getOrDefault(entity,
-                                                                   new LinkedList<>());
-        pending.add(event);
-        scheduler.pendingEvents.put(entity, pending);
-    }
-
-    public static void unscheduleAllEvents(
-            EventScheduler scheduler, Entity entity)
-    {
-        List<Event> pending = scheduler.pendingEvents.remove(entity);
-
-        if (pending != null) {
-            for (Event event : pending) {
-                scheduler.eventQueue.remove(event);
-            }
-        }
-    }
-
     public static void removePendingEvent(
             EventScheduler scheduler, Event event)
     {
