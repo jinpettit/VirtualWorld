@@ -87,56 +87,6 @@ public final class Functions
     public static final int TREE_HEALTH_MIN = 1;
 
 
-    public static void executeAnimationAction(
-            Action action, EventScheduler scheduler)
-    {
-        action.entity.nextImage();
-
-        if (action.repeatCount != 1) {
-            scheduleEvent(scheduler, action.entity,
-                          createAnimationAction(action.entity,
-                                                Math.max(action.repeatCount - 1,
-                                                         0)),
-                          action.entity.getAnimationPeriod());
-        }
-    }
-
-    public static void executeActivityAction(
-            Action action, EventScheduler scheduler)
-    {
-        switch (action.entity.kind) {
-            case SAPLING:
-                action.entity.executeSaplingActivity(action.world,
-                                         action.imageStore, scheduler);
-                break;
-
-            case TREE:
-                action.entity.executeTreeActivity(action.world,
-                                            action.imageStore, scheduler);
-                break;
-
-            case FAIRY:
-                action.entity.executeFairyActivity(action.world,
-                                   action.imageStore, scheduler);
-                break;
-
-            case DUDE_NOT_FULL:
-                action.entity.executeDudeNotFullActivity(action.world,
-                                       action.imageStore, scheduler);
-                break;
-
-            case DUDE_FULL:
-                action.entity.executeDudeFullActivity(action.world,
-                                     action.imageStore, scheduler);
-                break;
-
-            default:
-                throw new UnsupportedOperationException(String.format(
-                        "executeActivityAction not supported for %s",
-                        action.entity.kind));
-        }
-    }
-
     public static boolean transformPlant( Entity entity,
                                           WorldModel world,
                                           EventScheduler scheduler,
