@@ -94,27 +94,6 @@ public final class Functions
                         - min);
     }
 
-    public static List<PImage> getImageList(ImageStore imageStore, String key) {
-        return imageStore.images.getOrDefault(key, imageStore.defaultImages);
-    }
-
-    public static void loadImages(
-            Scanner in, ImageStore imageStore, PApplet screen)
-    {
-        int lineNumber = 0;
-        while (in.hasNextLine()) {
-            try {
-                processImageLine(imageStore.images, in.nextLine(), screen);
-            }
-            catch (NumberFormatException e) {
-                System.out.println(
-                        String.format("Image format error on line %d",
-                                      lineNumber));
-            }
-            lineNumber++;
-        }
-    }
-
     public static void processImageLine(
             Map<String, List<PImage>> images, String line, PApplet screen)
     {
@@ -162,11 +141,6 @@ public final class Functions
             }
         }
         img.updatePixels();
-    }
-
-    public static boolean contains(Viewport viewport, Point p) {
-        return p.y >= viewport.row && p.y < viewport.row + viewport.numRows
-                && p.x >= viewport.col && p.x < viewport.col + viewport.numCols;
     }
 
     public static void load(
@@ -227,7 +201,7 @@ public final class Functions
                                  Integer.parseInt(properties[BGND_ROW]));
             String id = properties[BGND_ID];
             setBackground(world, pt,
-                          new Background(id, getImageList(imageStore, id)));
+                          new Background(id, imageStore.getImageList(id)));
         }
 
         return properties.length == BGND_NUM_PROPERTIES;
@@ -241,7 +215,7 @@ public final class Functions
                     Integer.parseInt(properties[SAPLING_ROW]));
             String id = properties[SAPLING_ID];
             int health = Integer.parseInt(properties[SAPLING_HEALTH]);
-            Entity entity = new Entity(EntityKind.SAPLING, id, pt, getImageList(imageStore, SAPLING_KEY), 0, 0,
+            Entity entity = new Entity(EntityKind.SAPLING, id, pt, imageStore.getImageList(SAPLING_KEY), 0, 0,
                     SAPLING_ACTION_ANIMATION_PERIOD, SAPLING_ACTION_ANIMATION_PERIOD, health, SAPLING_HEALTH_LIMIT);
             tryAddEntity(world, entity);
         }
@@ -260,7 +234,7 @@ public final class Functions
                     Integer.parseInt(properties[DUDE_ACTION_PERIOD]),
                     Integer.parseInt(properties[DUDE_ANIMATION_PERIOD]),
                     Integer.parseInt(properties[DUDE_LIMIT]),
-                    getImageList(imageStore, DUDE_KEY));
+                    imageStore.getImageList(DUDE_KEY));
             tryAddEntity(world, entity);
         }
 
@@ -277,7 +251,7 @@ public final class Functions
                     pt,
                     Integer.parseInt(properties[FAIRY_ACTION_PERIOD]),
                     Integer.parseInt(properties[FAIRY_ANIMATION_PERIOD]),
-                    getImageList(imageStore, FAIRY_KEY));
+                    imageStore.getImageList(FAIRY_KEY));
             tryAddEntity(world, entity);
         }
 
@@ -295,7 +269,7 @@ public final class Functions
                                         Integer.parseInt(properties[TREE_ACTION_PERIOD]),
                                         Integer.parseInt(properties[TREE_ANIMATION_PERIOD]),
                                          Integer.parseInt(properties[TREE_HEALTH]),
-                                        getImageList(imageStore, TREE_KEY));
+                    imageStore.getImageList(TREE_KEY));
             tryAddEntity(world, entity);
         }
 
@@ -310,7 +284,7 @@ public final class Functions
                                  Integer.parseInt(properties[OBSTACLE_ROW]));
             Entity entity = createObstacle(properties[OBSTACLE_ID], pt,
                     Integer.parseInt(properties[OBSTACLE_ANIMATION_PERIOD]),
-                                           getImageList(imageStore,
+                    imageStore.getImageList(
                                                         OBSTACLE_KEY));
             tryAddEntity(world, entity);
         }
@@ -325,7 +299,7 @@ public final class Functions
             Point pt = new Point(Integer.parseInt(properties[HOUSE_COL]),
                                  Integer.parseInt(properties[HOUSE_ROW]));
             Entity entity = createHouse(properties[HOUSE_ID], pt,
-                                             getImageList(imageStore,
+                    imageStore.getImageList(
                                                           HOUSE_KEY));
             tryAddEntity(world, entity);
         }
@@ -498,7 +472,7 @@ public final class Functions
         for (Entity entity : view.world.entities) {
             Point pos = entity.position;
 
-            if (contains(view.viewport, pos)) {
+            if (view.viewport.contains(pos)) {
                 Point viewPoint = worldToViewport(view.viewport, pos.x, pos.y);
                 view.screen.image(entity.getCurrentImage(),
                                   viewPoint.x * view.tileWidth,

@@ -85,7 +85,7 @@ public final class Entity
 
             if (moveToFairy(world, fairyTarget.get(), scheduler)) {
                 Entity sapling = Functions.createSapling("sapling_" + this.id, tgtPos,
-                        Functions.getImageList(imageStore, Functions.SAPLING_KEY));
+                        imageStore.getImageList(Functions.SAPLING_KEY));
 
                 world.addEntity(sapling);
                 sapling.scheduleActions(scheduler, world, imageStore);
@@ -322,7 +322,7 @@ public final class Entity
         if (this.health <= 0) {
             Entity stump = Functions.createStump(this.id,
                     this.position,
-                    Functions.getImageList(imageStore, Functions.STUMP_KEY));
+                    imageStore.getImageList(Functions.STUMP_KEY));
 
             Functions.removeEntity(world, this);
             scheduler.unscheduleAllEvents(this);
@@ -344,7 +344,7 @@ public final class Entity
         if (this.health <= 0) {
             Entity stump = Functions.createStump(this.id,
                     this.position,
-                    Functions.getImageList(imageStore, Functions.STUMP_KEY));
+                    imageStore.getImageList(Functions.STUMP_KEY));
 
             Functions.removeEntity(world, this);
             scheduler.unscheduleAllEvents(this);
@@ -361,7 +361,7 @@ public final class Entity
                     Functions.getNumFromRange(Functions.TREE_ACTION_MAX, Functions.TREE_ACTION_MIN),
                     Functions.getNumFromRange(Functions.TREE_ANIMATION_MAX, Functions.TREE_ANIMATION_MIN),
                     Functions.getNumFromRange(Functions.TREE_HEALTH_MAX, Functions.TREE_HEALTH_MIN),
-                    Functions.getImageList(imageStore, Functions.TREE_KEY));
+                    imageStore.getImageList(Functions.TREE_KEY));
 
             Functions.removeEntity(world, this);
             scheduler.unscheduleAllEvents(this);
