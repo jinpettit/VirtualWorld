@@ -83,7 +83,7 @@ public final class Entity
         if (fairyTarget.isPresent()) {
             Point tgtPos = fairyTarget.get().position;
 
-            if (Functions.moveToFairy(this, world, fairyTarget.get(), scheduler)) {
+            if (moveToFairy(this, world, fairyTarget.get(), scheduler)) {
                 Entity sapling = Functions.createSapling("sapling_" + this.id, tgtPos,
                         Functions.getImageList(imageStore, Functions.SAPLING_KEY));
 
@@ -105,7 +105,7 @@ public final class Entity
         Optional<Entity> target =
                 Functions.findNearest(world, this.position, new ArrayList<>(Arrays.asList(EntityKind.TREE, EntityKind.SAPLING)));
 
-        if (!target.isPresent() || !Functions.moveToNotFull(this, world,
+        if (!target.isPresent() || !moveToNotFull(this, world,
                 target.get(),
                 scheduler)
                 || !transformNotFull(world, scheduler, imageStore))
@@ -124,7 +124,7 @@ public final class Entity
         Optional<Entity> fullTarget =
                 Functions.findNearest(world, this.position, new ArrayList<>(Arrays.asList(EntityKind.HOUSE)));
 
-        if (fullTarget.isPresent() && Functions.moveToFull(this, world,
+        if (fullTarget.isPresent() && moveToFull(this, world,
                 fullTarget.get(), scheduler))
         {
             transformFull(world, scheduler, imageStore);
@@ -328,7 +328,7 @@ public final class Entity
             Functions.unscheduleAllEvents(scheduler, this);
 
             world.addEntity(stump);
-            this.scheduleActions(scheduler, world, imageStore);
+            stump.scheduleActions(scheduler, world, imageStore);
 
             return true;
         }
@@ -350,7 +350,7 @@ public final class Entity
             Functions.unscheduleAllEvents(scheduler, this);
 
             world.addEntity(stump);
-            this.scheduleActions(scheduler, world, imageStore);
+            stump.scheduleActions(scheduler, world, imageStore);
 
             return true;
         }
@@ -367,13 +367,90 @@ public final class Entity
             Functions.unscheduleAllEvents(scheduler, this);
 
             world.addEntity(tree);
-            this.scheduleActions(scheduler, world, imageStore);
+            tree.scheduleActions(scheduler, world, imageStore);
 
             return true;
         }
 
         return false;
     }
+
+    public boolean moveToFairy(
+            Entity fairy,
+            WorldModel world,
+            Entity target,
+            EventScheduler scheduler)
+    {
+        if (Functions.adjacent(fairy.position, target.position)) {
+            Functions.removeEntity(world, target);
+            Functions.unscheduleAllEvents(scheduler, target);
+            return true;
+        }
+        else {
+            Point nextPos = fairy.nextPositionFairy(world, target.position);
+
+            if (!fairy.position.equals(nextPos)) {
+                Optional<Entity> occupant = Functions.getOccupant(world, nextPos);
+                if (occupant.isPresent()) {
+                    Functions.unscheduleAllEvents(scheduler, occupant.get());
+                }
+
+                Functions.moveEntity(world, fairy, nextPos);
+            }
+            return false;
+        }
+    }
+
+    public boolean moveToNotFull(
+            Entity dude,
+            WorldModel world,
+            Entity target,
+            EventScheduler scheduler)
+    {
+        if (Functions.adjacent(dude.position, target.position)) {
+            dude.resourceCount += 1;
+            target.health--;
+            return true;
+        }
+        else {
+            Point nextPos = dude.nextPositionDude(world, target.position);
+
+            if (!dude.position.equals(nextPos)) {
+                Optional<Entity> occupant = Functions.getOccupant(world, nextPos);
+                if (occupant.isPresent()) {
+                    Functions.unscheduleAllEvents(scheduler, occupant.get());
+                }
+
+                Functions.moveEntity(world, dude, nextPos);
+            }
+            return false;
+        }
+    }
+
+    public boolean moveToFull(
+            Entity dude,
+            WorldModel world,
+            Entity target,
+            EventScheduler scheduler)
+    {
+        if (Functions.adjacent(dude.position, target.position)) {
+            return true;
+        }
+        else {
+            Point nextPos = dude.nextPositionDude(world, target.position);
+
+            if (!dude.position.equals(nextPos)) {
+                Optional<Entity> occupant = Functions.getOccupant(world, nextPos);
+                if (occupant.isPresent()) {
+                    Functions.unscheduleAllEvents(scheduler, occupant.get());
+                }
+
+                Functions.moveEntity(world, dude, nextPos);
+            }
+            return false;
+        }
+    }
+
 }
 
 
