@@ -53,7 +53,7 @@ public final class Entity
         if (!transformPlant(world, scheduler, imageStore))
         {
             scheduler.scheduleEvent(this,
-                    Functions.createActivityAction(this, world, imageStore),
+                    this.createActivityAction(world, imageStore),
                     this.actionPeriod);
         }
     }
@@ -67,7 +67,7 @@ public final class Entity
         if (!transformPlant(world, scheduler, imageStore)) {
 
             scheduler.scheduleEvent(this,
-                    Functions.createActivityAction(this, world, imageStore),
+                    this.createActivityAction(world, imageStore),
                     this.actionPeriod);
         }
     }
@@ -84,7 +84,7 @@ public final class Entity
             Point tgtPos = fairyTarget.get().position;
 
             if (moveToFairy(world, fairyTarget.get(), scheduler)) {
-                Entity sapling = Functions.createSapling("sapling_" + this.id, tgtPos,
+                Entity sapling = this.createSapling("sapling_" + this.id, tgtPos,
                         imageStore.getImageList(Functions.SAPLING_KEY));
 
                 world.addEntity(sapling);
@@ -93,7 +93,7 @@ public final class Entity
         }
 
         scheduler.scheduleEvent(this,
-                Functions.createActivityAction(this, world, imageStore),
+                this.createActivityAction(world, imageStore),
                 this.actionPeriod);
     }
 
@@ -111,7 +111,7 @@ public final class Entity
                 || !transformNotFull(world, scheduler, imageStore))
         {
             scheduler.scheduleEvent(this,
-                    Functions.createActivityAction(this, world, imageStore),
+                    this.createActivityAction(world, imageStore),
                     this.actionPeriod);
         }
     }
@@ -131,7 +131,7 @@ public final class Entity
         }
         else {
             scheduler.scheduleEvent(this,
-                    Functions.createActivityAction(this, world, imageStore),
+                    this.createActivityAction(world, imageStore),
                     this.actionPeriod);
         }
     }
@@ -141,7 +141,7 @@ public final class Entity
             ImageStore imageStore)
     {
         if (this.resourceCount >= this.resourceLimit) {
-            Entity miner = Functions.createDudeFull(this.id,
+            Entity miner = this.createDudeFull(this.id,
                     this.position, this.actionPeriod,
                     this.animationPeriod,
                     this.resourceLimit,
@@ -164,7 +164,7 @@ public final class Entity
             EventScheduler scheduler,
             ImageStore imageStore)
     {
-        Entity miner = Functions.createDudeNotFull(this.id,
+        Entity miner = this.createDudeNotFull(this.id,
                 this.position, this.actionPeriod,
                 this.animationPeriod,
                 this.resourceLimit,
@@ -220,52 +220,52 @@ public final class Entity
         switch (this.kind) {
             case DUDE_FULL:
                 scheduler.scheduleEvent(this,
-                        Functions.createActivityAction(this, world, imageStore),
+                        this.createActivityAction(world, imageStore),
                         this.actionPeriod);
                 scheduler.scheduleEvent(this,
-                        Functions.createAnimationAction(this, 0),
+                        this.createAnimationAction(0),
                         getAnimationPeriod());
                 break;
 
             case DUDE_NOT_FULL:
                 scheduler.scheduleEvent(this,
-                        Functions.createActivityAction(this, world, imageStore),
+                        this.createActivityAction(world, imageStore),
                         this.actionPeriod);
                 scheduler.scheduleEvent(this,
-                        Functions.createAnimationAction(this, 0),
+                        this.createAnimationAction(0),
                         getAnimationPeriod());
                 break;
 
             case OBSTACLE:
                 scheduler.scheduleEvent(this,
-                        Functions.createAnimationAction(this, 0),
+                        this.createAnimationAction(0),
                         getAnimationPeriod());
                 break;
 
             case FAIRY:
                 scheduler.scheduleEvent(this,
-                        Functions.createActivityAction(this, world, imageStore),
+                        this.createActivityAction(world, imageStore),
                         this.actionPeriod);
                 scheduler.scheduleEvent(this,
-                        Functions.createAnimationAction(this, 0),
+                        this.createAnimationAction(0),
                         getAnimationPeriod());
                 break;
 
             case SAPLING:
                 scheduler.scheduleEvent(this,
-                        Functions.createActivityAction(this, world, imageStore),
+                        this.createActivityAction(world, imageStore),
                         this.actionPeriod);
                 scheduler.scheduleEvent(this,
-                        Functions.createAnimationAction(this, 0),
+                        this.createAnimationAction(0),
                         getAnimationPeriod());
                 break;
 
             case TREE:
                 scheduler.scheduleEvent(this,
-                        Functions.createActivityAction(this, world, imageStore),
+                        this.createActivityAction(world, imageStore),
                         this.actionPeriod);
                 scheduler.scheduleEvent(this,
-                        Functions.createAnimationAction(this, 0),
+                        this.createAnimationAction(0),
                         getAnimationPeriod());
                 break;
 
@@ -320,7 +320,7 @@ public final class Entity
             ImageStore imageStore)
     {
         if (this.health <= 0) {
-            Entity stump = Functions.createStump(this.id,
+            Entity stump = createStump(this.id,
                     this.position,
                     imageStore.getImageList(Functions.STUMP_KEY));
 
@@ -342,7 +342,7 @@ public final class Entity
             ImageStore imageStore)
     {
         if (this.health <= 0) {
-            Entity stump = Functions.createStump(this.id,
+            Entity stump = createStump(this.id,
                     this.position,
                     imageStore.getImageList(Functions.STUMP_KEY));
 
@@ -356,7 +356,7 @@ public final class Entity
         }
         else if (this.health >= this.healthLimit)
         {
-            Entity tree = Functions.createTree("tree_" + this.id,
+            Entity tree = createTree("tree_" + this.id,
                     this.position,
                     Functions.getNumFromRange(Functions.TREE_ACTION_MAX, Functions.TREE_ACTION_MIN),
                     Functions.getNumFromRange(Functions.TREE_ANIMATION_MAX, Functions.TREE_ANIMATION_MIN),
@@ -446,6 +446,98 @@ public final class Entity
             }
             return false;
         }
+    }
+
+    public Action createAnimationAction(int repeatCount) {
+        return new Action(ActionKind.ANIMATION, this, null, null,
+                repeatCount);
+    }
+
+    public Action createActivityAction(
+            WorldModel world, ImageStore imageStore)
+    {
+        return new Action(ActionKind.ACTIVITY, this, world, imageStore, 0);
+    }
+
+    public static Entity createHouse(
+            String id, Point position, List<PImage> images)
+    {
+        return new Entity(EntityKind.HOUSE, id, position, images, 0, 0, 0,
+                0, 0, 0);
+    }
+
+    public static Entity createObstacle(
+            String id, Point position, int animationPeriod, List<PImage> images)
+    {
+        return new Entity(EntityKind.OBSTACLE, id, position, images, 0, 0, 0,
+                animationPeriod, 0, 0);
+    }
+
+    public static Entity createTree(
+            String id,
+            Point position,
+            int actionPeriod,
+            int animationPeriod,
+            int health,
+            List<PImage> images)
+    {
+        return new Entity(EntityKind.TREE, id, position, images, 0, 0,
+                actionPeriod, animationPeriod, health, 0);
+    }
+
+    public static Entity createStump(
+            String id,
+            Point position,
+            List<PImage> images)
+    {
+        return new Entity(EntityKind.STUMP, id, position, images, 0, 0,
+                0, 0, 0, 0);
+    }
+
+    // health starts at 0 and builds up until ready to convert to Tree
+    public static Entity createSapling(
+            String id,
+            Point position,
+            List<PImage> images)
+    {
+        return new Entity(EntityKind.SAPLING, id, position, images, 0, 0,
+                Functions.SAPLING_ACTION_ANIMATION_PERIOD, Functions.SAPLING_ACTION_ANIMATION_PERIOD, 0, Functions.SAPLING_HEALTH_LIMIT);
+    }
+
+    public static Entity createFairy(
+            String id,
+            Point position,
+            int actionPeriod,
+            int animationPeriod,
+            List<PImage> images)
+    {
+        return new Entity(EntityKind.FAIRY, id, position, images, 0, 0,
+                actionPeriod, animationPeriod, 0, 0);
+    }
+
+    // need resource count, though it always starts at 0
+    public static Entity createDudeNotFull(
+            String id,
+            Point position,
+            int actionPeriod,
+            int animationPeriod,
+            int resourceLimit,
+            List<PImage> images)
+    {
+        return new Entity(EntityKind.DUDE_NOT_FULL, id, position, images, resourceLimit, 0,
+                actionPeriod, animationPeriod, 0, 0);
+    }
+
+    // don't technically need resource count ... full
+    public static Entity createDudeFull(
+            String id,
+            Point position,
+            int actionPeriod,
+            int animationPeriod,
+            int resourceLimit,
+            List<PImage> images) {
+        return new Entity(EntityKind.DUDE_FULL, id, position, images, resourceLimit, 0,
+                actionPeriod, animationPeriod, 0, 0);
     }
 
 }
