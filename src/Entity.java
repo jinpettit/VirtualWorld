@@ -272,6 +272,9 @@ public final class Entity
             default:
         }
     }
-
-
+    public PImage getCurrentImage() {
+            return (images.get(imageIndex));
+        }
 }
+
+
