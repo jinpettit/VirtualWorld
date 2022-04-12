@@ -87,7 +87,7 @@ public final class Entity
                 Entity sapling = Functions.createSapling("sapling_" + id, tgtPos,
                         Functions.getImageList(imageStore, Functions.SAPLING_KEY));
 
-                Functions.addEntity(world, sapling);
+                world.addEntity(sapling);
                 Functions.scheduleActions(sapling, scheduler, world, imageStore);
             }
         }
@@ -150,7 +150,7 @@ public final class Entity
             Functions.removeEntity(world, this);
             Functions.unscheduleAllEvents(scheduler, this);
 
-            Functions.addEntity(world, miner);
+            world.addEntity(miner);
             Functions.scheduleActions(miner, scheduler, world, imageStore);
 
             return true;
@@ -173,7 +173,43 @@ public final class Entity
         Functions.removeEntity(world, this);
         Functions.unscheduleAllEvents(scheduler, this);
 
-        Functions.addEntity(world, miner);
+        world.addEntity(miner);
         Functions.scheduleActions(miner, scheduler, world, imageStore);
+    }
+
+    public Point nextPositionFairy(
+             WorldModel world, Point destPos)
+    {
+        int horiz = Integer.signum(destPos.x - position.x);
+        Point newPos = new Point(position.x + horiz, position.y);
+
+        if (horiz == 0 || Functions.isOccupied(world, newPos)) {
+            int vert = Integer.signum(destPos.y - position.y);
+            newPos = new Point(position.x, position.y + vert);
+
+            if (vert == 0 || Functions.isOccupied(world, newPos)) {
+                newPos = position;
+            }
+        }
+
+        return newPos;
+    }
+
+    public Point nextPositionDude(
+            WorldModel world, Point destPos)
+    {
+        int horiz = Integer.signum(destPos.x - position.x);
+        Point newPos = new Point(position.x + horiz, position.y);
+
+        if (horiz == 0 || Functions.isOccupied(world, newPos) && Functions.getOccupancyCell(world, newPos).kind != EntityKind.STUMP) {
+            int vert = Integer.signum(destPos.y - position.y);
+            newPos = new Point(position.x, position.y + vert);
+
+            if (vert == 0 || Functions.isOccupied(world, newPos) &&  Functions.getOccupancyCell(world, newPos).kind != EntityKind.STUMP) {
+                newPos = position;
+            }
+        }
+
+        return newPos;
     }
 }

@@ -30,4 +30,10 @@ public final class WorldModel
         return pos.y >= 0 && pos.y < numRows && pos.x >= 0
                 && pos.x < numCols;
     }
+    public void addEntity(Entity entity) {
+        if (withinBounds(entity.position)) {
+            Functions.setOccupancyCell(this, entity.position, entity);
+            entities.add(entity);
+        }
+    }
 }

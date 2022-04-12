@@ -270,7 +270,7 @@ public final class Functions
             removeEntity(world, entity);
             unscheduleAllEvents(scheduler, entity);
 
-            addEntity(world, stump);
+            world.addEntity(stump);
             scheduleActions(stump, scheduler, world, imageStore);
 
             return true;
@@ -293,7 +293,7 @@ public final class Functions
             removeEntity(world, entity);
             unscheduleAllEvents(scheduler, entity);
 
-            addEntity(world, stump);
+            world.addEntity(stump);
             scheduleActions(stump, scheduler, world, imageStore);
 
             return true;
@@ -310,7 +310,7 @@ public final class Functions
             removeEntity(world, entity);
             unscheduleAllEvents(scheduler, entity);
 
-            addEntity(world, tree);
+            world.addEntity(tree);
             scheduleActions(tree, scheduler, world, imageStore);
 
             return true;
@@ -331,7 +331,7 @@ public final class Functions
             return true;
         }
         else {
-            Point nextPos = nextPositionFairy(fairy, world, target.position);
+            Point nextPos = fairy.nextPositionFairy(world, target.position);
 
             if (!fairy.position.equals(nextPos)) {
                 Optional<Entity> occupant = getOccupant(world, nextPos);
@@ -357,7 +357,7 @@ public final class Functions
             return true;
         }
         else {
-            Point nextPos = nextPositionDude(dude, world, target.position);
+            Point nextPos = dude.nextPositionDude(world, target.position);
 
             if (!dude.position.equals(nextPos)) {
                 Optional<Entity> occupant = getOccupant(world, nextPos);
@@ -381,7 +381,7 @@ public final class Functions
             return true;
         }
         else {
-            Point nextPos = nextPositionDude(dude, world, target.position);
+            Point nextPos = dude.nextPositionDude(world, target.position);
 
             if (!dude.position.equals(nextPos)) {
                 Optional<Entity> occupant = getOccupant(world, nextPos);
@@ -394,43 +394,6 @@ public final class Functions
             return false;
         }
     }
-
-    public static Point nextPositionFairy(
-            Entity entity, WorldModel world, Point destPos)
-    {
-        int horiz = Integer.signum(destPos.x - entity.position.x);
-        Point newPos = new Point(entity.position.x + horiz, entity.position.y);
-
-        if (horiz == 0 || isOccupied(world, newPos)) {
-            int vert = Integer.signum(destPos.y - entity.position.y);
-            newPos = new Point(entity.position.x, entity.position.y + vert);
-
-            if (vert == 0 || isOccupied(world, newPos)) {
-                newPos = entity.position;
-            }
-        }
-
-        return newPos;
-    }
-
-    public static Point nextPositionDude(
-            Entity entity, WorldModel world, Point destPos)
-    {
-        int horiz = Integer.signum(destPos.x - entity.position.x);
-        Point newPos = new Point(entity.position.x + horiz, entity.position.y);
-
-        if (horiz == 0 || isOccupied(world, newPos) && getOccupancyCell(world, newPos).kind != EntityKind.STUMP) {
-            int vert = Integer.signum(destPos.y - entity.position.y);
-            newPos = new Point(entity.position.x, entity.position.y + vert);
-
-            if (vert == 0 || isOccupied(world, newPos) &&  getOccupancyCell(world, newPos).kind != EntityKind.STUMP) {
-                newPos = entity.position;
-            }
-        }
-
-        return newPos;
-    }
-
 
     public static boolean adjacent(Point p1, Point p2) {
         return (p1.x == p2.x && Math.abs(p1.y - p2.y) == 1) || (p1.y == p2.y
@@ -743,7 +706,7 @@ public final class Functions
             throw new IllegalArgumentException("position occupied");
         }
 
-        addEntity(world, entity);
+        world.addEntity(entity);
     }
 
     public static Optional<Entity> nearestEntity(
@@ -796,12 +759,6 @@ public final class Functions
        Assumes that there is no entity currently occupying the
        intended destination cell.
     */
-    public static void addEntity(WorldModel world, Entity entity) {
-        if (world.withinBounds(entity.position)) {
-            setOccupancyCell(world, entity.position, entity);
-            world.entities.add(entity);
-        }
-    }
 
     public static void moveEntity(WorldModel world, Entity entity, Point pos) {
         Point oldPos = entity.position;
