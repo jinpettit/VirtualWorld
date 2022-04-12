@@ -87,37 +87,17 @@ public final class Functions
     public static final int TREE_HEALTH_MIN = 1;
 
 
-    public static int getAnimationPeriod(Entity entity) {
-        switch (entity.kind) {
-            case DUDE_FULL:
-            case DUDE_NOT_FULL:
-            case OBSTACLE:
-            case FAIRY:
-            case SAPLING:
-            case TREE:
-                return entity.animationPeriod;
-            default:
-                throw new UnsupportedOperationException(
-                        String.format("getAnimationPeriod not supported for %s",
-                                      entity.kind));
-        }
-    }
-
-    public static void nextImage(Entity entity) {
-        entity.imageIndex = (entity.imageIndex + 1) % entity.images.size();
-    }
-
     public static void executeAnimationAction(
             Action action, EventScheduler scheduler)
     {
-        nextImage(action.entity);
+        action.entity.nextImage();
 
         if (action.repeatCount != 1) {
             scheduleEvent(scheduler, action.entity,
                           createAnimationAction(action.entity,
                                                 Math.max(action.repeatCount - 1,
                                                          0)),
-                          getAnimationPeriod(action.entity));
+                          action.entity.getAnimationPeriod());
         }
     }
 
