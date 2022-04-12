@@ -27,8 +27,8 @@ public final class WorldModel
         }
     }
     public boolean withinBounds(Point pos) {
-        return pos.y >= 0 && pos.y < numRows && pos.x >= 0
-                && pos.x < numCols;
+        return pos.y >= 0 && pos.y < this.numRows && pos.x >= 0
+                && pos.x < this.numCols;
     }
     public void addEntity(Entity entity) {
         if (withinBounds(entity.position)) {

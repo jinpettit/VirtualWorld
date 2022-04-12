@@ -24,11 +24,11 @@ public final class WorldView
     }
 
     public void shiftView(int colDelta, int rowDelta) {
-        int newCol = Functions.clamp(viewport.col + colDelta, 0,
-                world.numCols - viewport.numCols);
-        int newRow = Functions.clamp(viewport.row + rowDelta, 0,
-                world.numRows - viewport.numRows);
+        int newCol = Functions.clamp(this.viewport.col + colDelta, 0,
+                this.world.numCols - this.viewport.numCols);
+        int newRow = Functions.clamp(this.viewport.row + rowDelta, 0,
+                this.world.numRows - this.viewport.numRows);
 
-        viewport.shift(newCol, newRow);
+        this.viewport.shift(newCol, newRow);
     }
 }

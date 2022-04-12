@@ -173,69 +173,6 @@ public final class Functions
         }
     }
 
-
-    public static void scheduleActions(
-            Entity entity,
-            EventScheduler scheduler,
-            WorldModel world,
-            ImageStore imageStore)
-    {
-        switch (entity.kind) {
-            case DUDE_FULL:
-                scheduleEvent(scheduler, entity,
-                        createActivityAction(entity, world, imageStore),
-                        entity.actionPeriod);
-                scheduleEvent(scheduler, entity,
-                        createAnimationAction(entity, 0),
-                        getAnimationPeriod(entity));
-                break;
-
-            case DUDE_NOT_FULL:
-                scheduleEvent(scheduler, entity,
-                        createActivityAction(entity, world, imageStore),
-                        entity.actionPeriod);
-                scheduleEvent(scheduler, entity,
-                        createAnimationAction(entity, 0),
-                        getAnimationPeriod(entity));
-                break;
-
-            case OBSTACLE:
-                scheduleEvent(scheduler, entity,
-                        createAnimationAction(entity, 0),
-                        getAnimationPeriod(entity));
-                break;
-
-            case FAIRY:
-                scheduleEvent(scheduler, entity,
-                        createActivityAction(entity, world, imageStore),
-                        entity.actionPeriod);
-                scheduleEvent(scheduler, entity,
-                        createAnimationAction(entity, 0),
-                        getAnimationPeriod(entity));
-                break;
-
-            case SAPLING:
-                scheduleEvent(scheduler, entity,
-                        createActivityAction(entity, world, imageStore),
-                        entity.actionPeriod);
-                scheduleEvent(scheduler, entity,
-                        createAnimationAction(entity, 0),
-                        getAnimationPeriod(entity));
-                break;
-
-            case TREE:
-                scheduleEvent(scheduler, entity,
-                        createActivityAction(entity, world, imageStore),
-                        entity.actionPeriod);
-                scheduleEvent(scheduler, entity,
-                        createAnimationAction(entity, 0),
-                        getAnimationPeriod(entity));
-                break;
-
-            default:
-        }
-    }
-
     public static boolean transformPlant( Entity entity,
                                           WorldModel world,
                                           EventScheduler scheduler,
@@ -271,7 +208,7 @@ public final class Functions
             unscheduleAllEvents(scheduler, entity);
 
             world.addEntity(stump);
-            scheduleActions(stump, scheduler, world, imageStore);
+            entity.scheduleActions(scheduler, world, imageStore);
 
             return true;
         }
@@ -294,7 +231,7 @@ public final class Functions
             unscheduleAllEvents(scheduler, entity);
 
             world.addEntity(stump);
-            scheduleActions(stump, scheduler, world, imageStore);
+            entity.scheduleActions(scheduler, world, imageStore);
 
             return true;
         }
@@ -311,7 +248,7 @@ public final class Functions
             unscheduleAllEvents(scheduler, entity);
 
             world.addEntity(tree);
-            scheduleActions(tree, scheduler, world, imageStore);
+            entity.scheduleActions(scheduler, world, imageStore);
 
             return true;
         }

@@ -23,7 +23,7 @@ public final class Action
         this.repeatCount = repeatCount;
     }
     public void executeAction(EventScheduler scheduler) {
-        switch (kind) {
+        switch (this.kind) {
             case ACTIVITY:
                 Functions.executeActivityAction(this, scheduler);
                 break;
