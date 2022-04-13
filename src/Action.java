@@ -3,11 +3,11 @@
  */
 public final class Action
 {
-    public ActionKind kind;
-    public Entity entity;
-    public WorldModel world;
-    public ImageStore imageStore;
-    public int repeatCount;
+    private final ActionKind kind;
+    private final Entity entity;
+    private final WorldModel world;
+    private final ImageStore imageStore;
+    private final int repeatCount;
 
     public Action(
             ActionKind kind,
@@ -22,6 +22,7 @@ public final class Action
         this.imageStore = imageStore;
         this.repeatCount = repeatCount;
     }
+
     public void executeAction(EventScheduler scheduler) {
         switch (this.kind) {
             case ACTIVITY:
@@ -33,7 +34,7 @@ public final class Action
                 break;
         }
     }
-    public void executeAnimationAction(
+    private void executeAnimationAction(
             EventScheduler scheduler)
     {
         this.entity.nextImage();
@@ -47,7 +48,7 @@ public final class Action
         }
     }
 
-    public void executeActivityAction(
+    private void executeActivityAction(
             EventScheduler scheduler)
     {
         switch (this.entity.getKind()) {
