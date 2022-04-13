@@ -43,14 +43,14 @@ final class WorldModel {
                 && pos.x < this.numCols;
     }
     public void addEntity(Entity entity) {
-        if (withinBounds(entity.position)) {
-            this.setOccupancyCell(entity.position, entity);
+        if (withinBounds(entity.getPosition())) {
+            this.setOccupancyCell(entity.getPosition(), entity);
             entities.add(entity);
         }
     }
 
     public void tryAddEntity(Entity entity) {
-        if (this.isOccupied(entity.position)) {
+        if (this.isOccupied(entity.getPosition())) {
             // arguably the wrong type of exception, but we are not
             // defining our own exceptions yet
             throw new IllegalArgumentException("position occupied");
@@ -66,10 +66,10 @@ final class WorldModel {
         }
         else {
             Entity nearest = entities.get(0);
-            int nearestDistance = nearest.position.distanceSquared(pos);
+            int nearestDistance = nearest.getPosition().distanceSquared(pos);
 
             for (Entity other : entities) {
-                int otherDistance = other.position.distanceSquared(pos);
+                int otherDistance = other.getPosition().distanceSquared(pos);
 
                 if (otherDistance < nearestDistance) {
                     nearest = other;
@@ -87,7 +87,7 @@ final class WorldModel {
         for (EntityKind kind: kinds)
         {
             for (Entity entity : this.entities) {
-                if (entity.kind == kind) {
+                if (entity.getKind() == kind) {
                     ofType.add(entity);
                 }
             }
@@ -102,17 +102,17 @@ final class WorldModel {
     */
 
     public void moveEntity(Entity entity, Point pos) {
-        Point oldPos = entity.position;
+        Point oldPos = entity.getPosition();
         if (this.withinBounds(pos) && !pos.equals(oldPos)) {
             this.setOccupancyCell(oldPos, null);
             this.removeEntityAt(pos);
             this.setOccupancyCell(pos, entity);
-            entity.position = pos;
+            entity.setPosition(pos);
         }
     }
 
     public void removeEntity(Entity entity) {
-        this.removeEntityAt(entity.position);
+        this.removeEntityAt(entity.getPosition());
     }
 
     private void removeEntityAt(Point pos) {
@@ -121,7 +121,7 @@ final class WorldModel {
 
             /* This moves the entity just outside of the grid for
              * debugging purposes. */
-            entity.position = new Point(-1, -1);
+            entity.setPosition(new Point(-1, -1));
             this.entities.remove(entity);
             this.setOccupancyCell(pos, null);
         }

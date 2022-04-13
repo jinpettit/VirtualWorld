@@ -8,17 +8,17 @@ import processing.core.PImage;
  */
 public final class Entity
 {
-    public EntityKind kind;
-    public String id;
-    public Point position;
-    public List<PImage> images;
-    public int imageIndex;
-    public int resourceLimit;
-    public int resourceCount;
-    public int actionPeriod;
-    public int animationPeriod;
-    public int health;
-    public int healthLimit;
+    private final EntityKind kind;
+    private final String id;
+    private Point position;
+    private final List<PImage> images;
+    private int imageIndex;
+    private final int resourceLimit;
+    private int resourceCount;
+    private final int actionPeriod;
+    private final int animationPeriod;
+    private int health;
+    private final int healthLimit;
 
     public Entity(
             EntityKind kind,
@@ -44,6 +44,27 @@ public final class Entity
         this.health = health;
         this.healthLimit = healthLimit;
     }
+
+    public EntityKind getKind() {
+        return kind;
+    }
+
+    public String getId(){
+        return id;
+    }
+
+    public Point getPosition() {
+        return position;
+    }
+
+    public void setPosition(Point position) {
+        this.position = position;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
     public void executeSaplingActivity(
             WorldModel world,
             ImageStore imageStore,
@@ -135,7 +156,7 @@ public final class Entity
                     this.actionPeriod);
         }
     }
-    public boolean transformNotFull(
+    private boolean transformNotFull(
             WorldModel world,
             EventScheduler scheduler,
             ImageStore imageStore)
@@ -159,7 +180,7 @@ public final class Entity
         return false;
     }
 
-    public void transformFull(
+    private void transformFull(
             WorldModel world,
             EventScheduler scheduler,
             ImageStore imageStore)
@@ -177,7 +198,7 @@ public final class Entity
         miner.scheduleActions(scheduler, world, imageStore);
     }
 
-    public Point nextPositionFairy(
+    private Point nextPositionFairy(
              WorldModel world, Point destPos)
     {
         int horiz = Integer.signum(destPos.x - this.position.x);
@@ -195,7 +216,7 @@ public final class Entity
         return newPos;
     }
 
-    public Point nextPositionDude(
+    private Point nextPositionDude(
             WorldModel world, Point destPos)
     {
         int horiz = Integer.signum(destPos.x - this.position.x);
@@ -295,7 +316,7 @@ public final class Entity
         this.imageIndex = (this.imageIndex + 1) % this.images.size();
     }
 
-    public boolean transformPlant( WorldModel world,
+    private boolean transformPlant( WorldModel world,
                                           EventScheduler scheduler,
                                           ImageStore imageStore)
     {
@@ -314,7 +335,7 @@ public final class Entity
         }
     }
 
-    public boolean transformTree(
+    private boolean transformTree(
             WorldModel world,
             EventScheduler scheduler,
             ImageStore imageStore)
@@ -336,7 +357,7 @@ public final class Entity
         return false;
     }
 
-    public boolean transformSapling(
+    private boolean transformSapling(
             WorldModel world,
             EventScheduler scheduler,
             ImageStore imageStore)
@@ -375,7 +396,7 @@ public final class Entity
         return false;
     }
 
-    public boolean moveToFairy(
+    private boolean moveToFairy(
             WorldModel world,
             Entity target,
             EventScheduler scheduler)
@@ -400,7 +421,7 @@ public final class Entity
         }
     }
 
-    public boolean moveToNotFull(
+    private boolean moveToNotFull(
             WorldModel world,
             Entity target,
             EventScheduler scheduler)
@@ -425,7 +446,7 @@ public final class Entity
         }
     }
 
-    public boolean moveToFull(
+    private boolean moveToFull(
             WorldModel world,
             Entity target,
             EventScheduler scheduler)
@@ -453,7 +474,7 @@ public final class Entity
                 repeatCount);
     }
 
-    public Action createActivityAction(
+    private Action createActivityAction(
             WorldModel world, ImageStore imageStore)
     {
         return new Action(ActionKind.ACTIVITY, this, world, imageStore, 0);
@@ -485,7 +506,7 @@ public final class Entity
                 actionPeriod, animationPeriod, health, 0);
     }
 
-    public static Entity createStump(
+    private static Entity createStump(
             String id,
             Point position,
             List<PImage> images)
@@ -495,7 +516,7 @@ public final class Entity
     }
 
     // health starts at 0 and builds up until ready to convert to Tree
-    public static Entity createSapling(
+    private static Entity createSapling(
             String id,
             Point position,
             List<PImage> images)
@@ -529,7 +550,7 @@ public final class Entity
     }
 
     // don't technically need resource count ... full
-    public static Entity createDudeFull(
+    private static Entity createDudeFull(
             String id,
             Point position,
             int actionPeriod,
