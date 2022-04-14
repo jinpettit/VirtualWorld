@@ -102,7 +102,7 @@ final class WorldModel {
     public void addEntity(Entity entity) {
         if (withinBounds(entity.getPosition())) {
             this.setOccupancyCell(entity.getPosition(), entity);
-            entities.add(entity);
+            this.entities.add(entity);
         }
     }
 
@@ -115,6 +115,7 @@ final class WorldModel {
 
         this.addEntity(entity);
     }
+
     private Optional<Entity> nearestEntity(
             List<Entity> entities, Point pos)
     {
@@ -289,7 +290,7 @@ final class WorldModel {
         if (properties.length == FAIRY_NUM_PROPERTIES) {
             Point pt = new Point(Integer.parseInt(properties[FAIRY_COL]),
                     Integer.parseInt(properties[FAIRY_ROW]));
-            Entity entity = Entity.createFairy(properties[FAIRY_ID],
+            Entity entity = createFairy(properties[FAIRY_ID],
                     pt,
                     Integer.parseInt(properties[FAIRY_ACTION_PERIOD]),
                     Integer.parseInt(properties[FAIRY_ANIMATION_PERIOD]),
@@ -324,7 +325,7 @@ final class WorldModel {
         if (properties.length == OBSTACLE_NUM_PROPERTIES) {
             Point pt = new Point(Integer.parseInt(properties[OBSTACLE_COL]),
                     Integer.parseInt(properties[OBSTACLE_ROW]));
-            Entity entity = Entity.createObstacle(properties[OBSTACLE_ID], pt,
+            Entity entity = createObstacle(properties[OBSTACLE_ID], pt,
                     Integer.parseInt(properties[OBSTACLE_ANIMATION_PERIOD]),
                     imageStore.getImageList(
                             OBSTACLE_KEY));
@@ -340,12 +341,37 @@ final class WorldModel {
         if (properties.length == HOUSE_NUM_PROPERTIES) {
             Point pt = new Point(Integer.parseInt(properties[HOUSE_COL]),
                     Integer.parseInt(properties[HOUSE_ROW]));
-            Entity entity = Entity.createHouse(properties[HOUSE_ID], pt,
+            Entity entity = createHouse(properties[HOUSE_ID], pt,
                     imageStore.getImageList(
                             HOUSE_KEY));
             this.tryAddEntity(entity);
         }
 
         return properties.length == HOUSE_NUM_PROPERTIES;
+    }
+
+    private static Entity createHouse(
+            String id, Point position, List<PImage> images)
+    {
+        return new Entity(EntityKind.HOUSE, id, position, images, 0, 0, 0,
+                0, 0, 0);
+    }
+
+    private static Entity createObstacle(
+            String id, Point position, int animationPeriod, List<PImage> images)
+    {
+        return new Entity(EntityKind.OBSTACLE, id, position, images, 0, 0, 0,
+                animationPeriod, 0, 0);
+    }
+
+    private static Entity createFairy(
+            String id,
+            Point position,
+            int actionPeriod,
+            int animationPeriod,
+            List<PImage> images)
+    {
+        return new Entity(EntityKind.FAIRY, id, position, images, 0, 0,
+                actionPeriod, animationPeriod, 0, 0);
     }
 }

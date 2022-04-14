@@ -487,20 +487,6 @@ public final class Entity
         return new Action(ActionKind.ACTIVITY, this, world, imageStore, 0);
     }
 
-    public static Entity createHouse(
-            String id, Point position, List<PImage> images)
-    {
-        return new Entity(EntityKind.HOUSE, id, position, images, 0, 0, 0,
-                0, 0, 0);
-    }
-
-    public static Entity createObstacle(
-            String id, Point position, int animationPeriod, List<PImage> images)
-    {
-        return new Entity(EntityKind.OBSTACLE, id, position, images, 0, 0, 0,
-                animationPeriod, 0, 0);
-    }
-
     public static Entity createTree(
             String id,
             Point position,
@@ -532,16 +518,6 @@ public final class Entity
                 WorldModel.SAPLING_ACTION_ANIMATION_PERIOD, WorldModel.SAPLING_ACTION_ANIMATION_PERIOD, 0, WorldModel.SAPLING_HEALTH_LIMIT);
     }
 
-    public static Entity createFairy(
-            String id,
-            Point position,
-            int actionPeriod,
-            int animationPeriod,
-            List<PImage> images)
-    {
-        return new Entity(EntityKind.FAIRY, id, position, images, 0, 0,
-                actionPeriod, animationPeriod, 0, 0);
-    }
 
     // need resource count, though it always starts at 0
     public static Entity createDudeNotFull(
