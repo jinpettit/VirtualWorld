@@ -20,6 +20,13 @@ public final class Entity
     private int health;
     private final int healthLimit;
 
+    private static final int TREE_ANIMATION_MAX = 600;
+    private static final int TREE_ANIMATION_MIN = 50;
+    private static final int TREE_ACTION_MAX = 1400;
+    private static final int TREE_ACTION_MIN = 1000;
+    private static final int TREE_HEALTH_MAX = 3;
+    private static final int TREE_HEALTH_MIN = 1;
+
     public Entity(
             EntityKind kind,
             String id,
@@ -106,7 +113,7 @@ public final class Entity
 
             if (moveToFairy(world, fairyTarget.get(), scheduler)) {
                 Entity sapling = this.createSapling("sapling_" + this.id, tgtPos,
-                        imageStore.getImageList(Functions.SAPLING_KEY));
+                        imageStore.getImageList(WorldModel.SAPLING_KEY));
 
                 world.addEntity(sapling);
                 sapling.scheduleActions(scheduler, world, imageStore);
@@ -343,7 +350,7 @@ public final class Entity
         if (this.health <= 0) {
             Entity stump = createStump(this.id,
                     this.position,
-                    imageStore.getImageList(Functions.STUMP_KEY));
+                    imageStore.getImageList(world.STUMP_KEY));
 
             world.removeEntity(this);
             scheduler.unscheduleAllEvents(this);
@@ -365,7 +372,7 @@ public final class Entity
         if (this.health <= 0) {
             Entity stump = createStump(this.id,
                     this.position,
-                    imageStore.getImageList(Functions.STUMP_KEY));
+                    imageStore.getImageList(world.STUMP_KEY));
 
             world.removeEntity(this);
             scheduler.unscheduleAllEvents(this);
@@ -379,10 +386,10 @@ public final class Entity
         {
             Entity tree = createTree("tree_" + this.id,
                     this.position,
-                    Functions.getNumFromRange(Functions.TREE_ACTION_MAX, Functions.TREE_ACTION_MIN),
-                    Functions.getNumFromRange(Functions.TREE_ANIMATION_MAX, Functions.TREE_ANIMATION_MIN),
-                    Functions.getNumFromRange(Functions.TREE_HEALTH_MAX, Functions.TREE_HEALTH_MIN),
-                    imageStore.getImageList(Functions.TREE_KEY));
+                    Functions.getNumFromRange(TREE_ACTION_MAX, TREE_ACTION_MIN),
+                    Functions.getNumFromRange(TREE_ANIMATION_MAX, TREE_ANIMATION_MIN),
+                    Functions.getNumFromRange(TREE_HEALTH_MAX, TREE_HEALTH_MIN),
+                    imageStore.getImageList(world.TREE_KEY));
 
             world.removeEntity(this);
             scheduler.unscheduleAllEvents(this);
@@ -522,7 +529,7 @@ public final class Entity
             List<PImage> images)
     {
         return new Entity(EntityKind.SAPLING, id, position, images, 0, 0,
-                Functions.SAPLING_ACTION_ANIMATION_PERIOD, Functions.SAPLING_ACTION_ANIMATION_PERIOD, 0, Functions.SAPLING_HEALTH_LIMIT);
+                WorldModel.SAPLING_ACTION_ANIMATION_PERIOD, WorldModel.SAPLING_ACTION_ANIMATION_PERIOD, 0, WorldModel.SAPLING_HEALTH_LIMIT);
     }
 
     public static Entity createFairy(
