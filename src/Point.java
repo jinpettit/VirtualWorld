@@ -22,8 +22,8 @@ final class Point
 
     public int hashCode() {
         int result = 17;
-        result = result * 31 + x;
-        result = result * 31 + y;
+        result = result * 31 + this.x;
+        result = result * 31 + this.y;
         return result;
     }
 

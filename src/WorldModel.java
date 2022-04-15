@@ -106,7 +106,7 @@ final class WorldModel {
         }
     }
 
-    public void tryAddEntity(Entity entity) {
+    private void tryAddEntity(Entity entity) {
         if (this.isOccupied(entity.getPosition())) {
             // arguably the wrong type of exception, but we are not
             // defining our own exceptions yet
@@ -199,7 +199,8 @@ final class WorldModel {
     public boolean isOccupied(Point pos) {
         return this.withinBounds(pos) && this.getOccupancyCell(pos) != null;
     }
-    public void setBackground(
+
+    private void setBackground(
             Point pos, Background background)
     {
         if (this.withinBounds(pos)) {

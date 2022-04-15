@@ -44,7 +44,7 @@ public final class Functions
         }
     }
 
-    public static List<PImage> getImages(
+    private static List<PImage> getImages(
             Map<String, List<PImage>> images, String key)
     {
         List<PImage> imgs = images.get(key);
@@ -59,7 +59,7 @@ public final class Functions
       Called with color for which alpha should be set and alpha value.
       setAlpha(img, color(255, 255, 255), 0));
     */
-    public static void setAlpha(PImage img, int maskColor, int alpha) {
+    private static void setAlpha(PImage img, int maskColor, int alpha) {
         int alphaValue = alpha << 24;
         int nonAlpha = maskColor & COLOR_MASK;
         img.format = PApplet.ARGB;
@@ -98,7 +98,7 @@ public final class Functions
 
 
 
-    public static boolean processLine(
+    private static boolean processLine(
             String line, WorldModel world, ImageStore imageStore)
     {
         String[] properties = line.split("\\s");

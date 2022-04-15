@@ -27,6 +27,8 @@ public final class Entity
     private static final int TREE_HEALTH_MAX = 3;
     private static final int TREE_HEALTH_MIN = 1;
 
+    private static final Random rand = new Random();
+
     public Entity(
             EntityKind kind,
             String id,
