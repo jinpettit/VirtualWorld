@@ -116,7 +116,7 @@ final class WorldModel {
         this.addEntity(entity);
     }
 
-    private Optional<Entity> nearestEntity(
+    private static Optional<Entity> nearestEntity(
             List<Entity> entities, Point pos)
     {
         if (entities.isEmpty()) {

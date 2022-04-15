@@ -46,11 +46,6 @@ removeEntityAt
 2.Even though it refers more to the Entity class, the methods that are moved to the WorldModel class
 refers calls these method often  
 
-
-getCurrentImage
-1. Background and Entity class
-2. Split the method up into two classes since it refers to both classes in a if else statement
-
 createActivityAction
 createAnimationAction
 1. Entity Class

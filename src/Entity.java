@@ -386,9 +386,9 @@ public final class Entity
         {
             Entity tree = createTree("tree_" + this.id,
                     this.position,
-                    Functions.getNumFromRange(TREE_ACTION_MAX, TREE_ACTION_MIN),
-                    Functions.getNumFromRange(TREE_ANIMATION_MAX, TREE_ANIMATION_MIN),
-                    Functions.getNumFromRange(TREE_HEALTH_MAX, TREE_HEALTH_MIN),
+                    this.getNumFromRange(TREE_ACTION_MAX, TREE_ACTION_MIN),
+                    this.getNumFromRange(TREE_ANIMATION_MAX, TREE_ANIMATION_MIN),
+                    this.getNumFromRange(TREE_HEALTH_MAX, TREE_HEALTH_MIN),
                     imageStore.getImageList(world.TREE_KEY));
 
             world.removeEntity(this);
@@ -542,6 +542,14 @@ public final class Entity
             List<PImage> images) {
         return new Entity(EntityKind.DUDE_FULL, id, position, images, resourceLimit, 0,
                 actionPeriod, animationPeriod, 0, 0);
+    }
+
+    private static int getNumFromRange(int max, int min)
+    {
+        Random rand = new Random();
+        return min + rand.nextInt(
+                max
+                        - min);
     }
 
 }

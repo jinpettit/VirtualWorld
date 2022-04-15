@@ -23,15 +23,6 @@ public final class Functions
     public static final List<String> PATH_KEYS = new ArrayList<>(Arrays.asList("bridge", "dirt", "dirt_horiz", "dirt_vert_left", "dirt_vert_right",
             "dirt_bot_left_corner", "dirt_bot_right_up", "dirt_vert_left_bot"));
 
-
-    public static int getNumFromRange(int max, int min)
-    {
-        Random rand = new Random();
-        return min + rand.nextInt(
-                max
-                        - min);
-    }
-
     public static void processImageLine(
             Map<String, List<PImage>> images, String line, PApplet screen)
     {
@@ -131,10 +122,6 @@ public final class Functions
         }
 
         return false;
-    }
-
-    public static int clamp(int value, int low, int high) {
-        return Math.min(high, Math.max(value, low));
     }
 
 }
