@@ -1,10 +1,3 @@
-nextPositionFairy
-nextPositionDude
-
-1.Entity class
-2.Although variables from both the Entity class and Point class, since it refers more to the Entity class,
-that's where I decided to move it
-
 contains
 
 1.Viewport class
@@ -27,7 +20,6 @@ tryAddEntity
 1.WorldModel class     
 2.It uses addEntity method which was moved to the WorldModel class
 
-withinBounds
 findNearest
 1.WorldModel class 
 2.Even though it refers more to the Point class, the methods that are moved to the WorldModel class
@@ -38,7 +30,6 @@ nearestEntity
 1. WorldModel class  
 2. The methods that are moved to the WorldModel classrefers calls these method often   
 
-addEntity
 moveEntity
 removeEntity
 removeEntityAt   
