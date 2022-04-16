@@ -10,8 +10,6 @@ import processing.core.PApplet;
  */
 public final class Functions
 {
-    public static final Random rand = new Random();
-
     public static final int COLOR_MASK = 0xffffff;
     public static final int KEYED_IMAGE_MIN = 5;
     private static final int KEYED_RED_IDX = 2;
