@@ -10,13 +10,13 @@ import processing.core.PApplet;
  */
 public final class Functions
 {
-    public static final int COLOR_MASK = 0xffffff;
-    public static final int KEYED_IMAGE_MIN = 5;
+    private static final int COLOR_MASK = 0xffffff;
+    private static final int KEYED_IMAGE_MIN = 5;
     private static final int KEYED_RED_IDX = 2;
     private static final int KEYED_GREEN_IDX = 3;
     private static final int KEYED_BLUE_IDX = 4;
 
-    public static final int PROPERTY_KEY = 0;
+    private static final int PROPERTY_KEY = 0;
 
     public static final List<String> PATH_KEYS = new ArrayList<>(Arrays.asList("bridge", "dirt", "dirt_horiz", "dirt_vert_left", "dirt_vert_right",
             "dirt_bot_left_corner", "dirt_bot_right_up", "dirt_vert_left_bot"));
