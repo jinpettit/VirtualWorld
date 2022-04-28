@@ -2,7 +2,7 @@ import processing.core.PImage;
 
 import java.util.*;
 
-public class Tree {
+public class Tree implements ActionEntity, TreeEntity{
     private final String id;
     private Point position;
     private final List<PImage> images;
@@ -10,7 +10,6 @@ public class Tree {
     private final int actionPeriod;
     private final int animationPeriod;
     private int health;
-    private final int healthLimit;
 
     private static final Random rand = new Random();
 
@@ -20,8 +19,7 @@ public class Tree {
             List<PImage> images,
             int actionPeriod,
             int animationPeriod,
-            int health,
-            int healthLimit) {
+            int health) {
         this.id = id;
         this.position = position;
         this.images = images;
@@ -29,7 +27,6 @@ public class Tree {
         this.actionPeriod = actionPeriod;
         this.animationPeriod = animationPeriod;
         this.health = health;
-        this.healthLimit = healthLimit;
     }
 
     public String getId() {
@@ -49,15 +46,15 @@ public class Tree {
     }
 
 
-    public void executeTreeActivity(
+    public void executeActivity(
             WorldModel world,
             ImageStore imageStore,
             EventScheduler scheduler) {
 
         if (!transformPlant(world, scheduler, imageStore)) {
 
-            scheduler.scheduleEvent((Entity)this,
-                    Functions.createActivityAction((Entity)this, world, imageStore),
+            scheduler.scheduleEvent(this,
+                    Factory.createActivityAction(this, world, imageStore),
                     this.actionPeriod);
         }
 
@@ -67,11 +64,11 @@ public class Tree {
             EventScheduler scheduler,
             WorldModel world,
             ImageStore imageStore) {
-        scheduler.scheduleEvent((Entity)this,
-                Functions.createActivityAction((Entity) this, world, imageStore),
+        scheduler.scheduleEvent(this,
+                Factory.createActivityAction(this, world, imageStore),
                 this.actionPeriod);
-        scheduler.scheduleEvent((Entity)this,
-                Functions.createAnimationAction((Entity)this, 0),
+        scheduler.scheduleEvent(this,
+                Factory.createAnimationAction(this, 0),
                 getAnimationPeriod());
 
     }
@@ -88,10 +85,9 @@ public class Tree {
         this.imageIndex = (this.imageIndex + 1) % this.images.size();
     }
 
-    private boolean transformPlant(WorldModel world,
-                                   EventScheduler scheduler,
-                                   ImageStore imageStore) {
-        return transformTree(world, scheduler, imageStore);
+
+    public boolean transformPlant(WorldModel world, EventScheduler scheduler, ImageStore imageStore) {
+            return transformTree(world, scheduler, imageStore);
     }
 
     private boolean transformTree(
@@ -99,12 +95,12 @@ public class Tree {
             EventScheduler scheduler,
             ImageStore imageStore) {
         if (this.health <= 0) {
-            Entity stump = Functions.createStump(this.id,
+            Entity stump = Factory.createStump(this.id,
                     this.position,
                     imageStore.getImageList(Functions.STUMP_KEY));
 
-            world.removeEntity((Entity) this);
-            scheduler.unscheduleAllEvents((Entity) this);
+            world.removeEntity(this);
+            scheduler.unscheduleAllEvents(this);
 
             world.addEntity(stump);
             ((Tree)stump).scheduleActions(scheduler, world, imageStore);

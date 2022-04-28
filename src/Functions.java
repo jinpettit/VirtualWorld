@@ -24,15 +24,6 @@ public final class Functions
     private static final int BGND_COL = 2;
     private static final int BGND_ROW = 3;
 
-    public static final String SAPLING_KEY = "sapling";
-    public static final int SAPLING_HEALTH_LIMIT = 5;
-    public static final int SAPLING_ACTION_ANIMATION_PERIOD = 1000; // have to be in sync since grows and gains health at same time
-    private static final int SAPLING_NUM_PROPERTIES = 4;
-    private static final int SAPLING_ID = 1;
-    private static final int SAPLING_COL = 2;
-    private static final int SAPLING_ROW = 3;
-    private static final int SAPLING_HEALTH = 4;
-
     public static final String OBSTACLE_KEY = "obstacle";
     private static final int OBSTACLE_NUM_PROPERTIES = 5;
     private static final int OBSTACLE_ID = 1;
@@ -48,6 +39,14 @@ public final class Functions
     private static final int DUDE_LIMIT = 4;
     private static final int DUDE_ACTION_PERIOD = 5;
     private static final int DUDE_ANIMATION_PERIOD = 6;
+    public static final String SAPLING_KEY = "sapling";
+    public static final int SAPLING_HEALTH_LIMIT = 5;
+    public static final int SAPLING_ACTION_ANIMATION_PERIOD = 1000; // have to be in sync since grows and gains health at same time
+    private static final int SAPLING_NUM_PROPERTIES = 4;
+    private static final int SAPLING_ID = 1;
+    private static final int SAPLING_COL = 2;
+    private static final int SAPLING_ROW = 3;
+    private static final int SAPLING_HEALTH = 4;
 
     public static final String HOUSE_KEY = "house";
     private static final int HOUSE_NUM_PROPERTIES = 4;
@@ -178,99 +177,6 @@ public final class Functions
         return false;
     }
 
-    public static Action createAnimationAction(Entity entity, int repeatCount) {
-        return new AnimationAction(entity, null, null,
-                repeatCount);
-    }
-
-    public static Action createActivityAction(Entity entity,
-            WorldModel world, ImageStore imageStore)
-    {
-        return new ActivityAction(entity, world, imageStore, 0);
-    }
-
-    public static Entity createTree(
-            String id,
-            Point position,
-            int actionPeriod,
-            int animationPeriod,
-            int health,
-            List<PImage> images)
-    {
-        return new Entity(EntityKind.TREE, id, position, images, 0, 0,
-                actionPeriod, animationPeriod, health, 0);
-    }
-
-    public static Entity createStump(
-            String id,
-            Point position,
-            List<PImage> images)
-    {
-        return new Entity(EntityKind.STUMP, id, position, images, 0, 0,
-                0, 0, 0, 0);
-    }
-
-    // health starts at 0 and builds up until ready to convert to Tree
-    public static Entity createSapling(
-            String id,
-            Point position,
-            List<PImage> images)
-    {
-        return new Entity(EntityKind.SAPLING, id, position, images, 0, 0,
-                SAPLING_ACTION_ANIMATION_PERIOD, SAPLING_ACTION_ANIMATION_PERIOD, 0, SAPLING_HEALTH_LIMIT);
-    }
-
-
-    // need resource count, though it always starts at 0
-    public static Entity createDudeNotFull(
-            String id,
-            Point position,
-            int actionPeriod,
-            int animationPeriod,
-            int resourceLimit,
-            List<PImage> images)
-    {
-        return new Entity(EntityKind.DUDE_NOT_FULL, id, position, images, resourceLimit, 0,
-                actionPeriod, animationPeriod, 0, 0);
-    }
-
-    // don't technically need resource count ... full
-    public static Entity createDudeFull(
-            String id,
-            Point position,
-            int actionPeriod,
-            int animationPeriod,
-            int resourceLimit,
-            List<PImage> images) {
-        return new Entity(EntityKind.DUDE_FULL, id, position, images, resourceLimit, 0,
-                actionPeriod, animationPeriod, 0, 0);
-    }
-
-    public static Entity createHouse(
-            String id, Point position, List<PImage> images)
-    {
-        return new Entity(EntityKind.HOUSE, id, position, images, 0, 0, 0,
-                0, 0, 0);
-    }
-
-    public static Entity createObstacle(
-            String id, Point position, int animationPeriod, List<PImage> images)
-    {
-        return new Entity(EntityKind.OBSTACLE, id, position, images, 0, 0, 0,
-                animationPeriod, 0, 0);
-    }
-
-    public static Entity createFairy(
-            String id,
-            Point position,
-            int actionPeriod,
-            int animationPeriod,
-            List<PImage> images)
-    {
-        return new Entity(EntityKind.FAIRY, id, position, images, 0, 0,
-                actionPeriod, animationPeriod, 0, 0);
-    }
-
     public static boolean parseBackground(
             String[] properties, WorldModel world, ImageStore imageStore)
     {
@@ -307,7 +213,7 @@ public final class Functions
         if (properties.length == DUDE_NUM_PROPERTIES) {
             Point pt = new Point(Integer.parseInt(properties[DUDE_COL]),
                     Integer.parseInt(properties[DUDE_ROW]));
-            Entity entity = Functions.createDudeNotFull(properties[DUDE_ID],
+            Entity entity = Factory.createDudeNotFull(properties[DUDE_ID],
                     pt,
                     Integer.parseInt(properties[DUDE_ACTION_PERIOD]),
                     Integer.parseInt(properties[DUDE_ANIMATION_PERIOD]),
@@ -325,7 +231,7 @@ public final class Functions
         if (properties.length == FAIRY_NUM_PROPERTIES) {
             Point pt = new Point(Integer.parseInt(properties[FAIRY_COL]),
                     Integer.parseInt(properties[FAIRY_ROW]));
-            Entity entity = createFairy(properties[FAIRY_ID],
+            Entity entity = Factory.createFairy(properties[FAIRY_ID],
                     pt,
                     Integer.parseInt(properties[FAIRY_ACTION_PERIOD]),
                     Integer.parseInt(properties[FAIRY_ANIMATION_PERIOD]),
@@ -342,7 +248,7 @@ public final class Functions
         if (properties.length == TREE_NUM_PROPERTIES) {
             Point pt = new Point(Integer.parseInt(properties[TREE_COL]),
                     Integer.parseInt(properties[TREE_ROW]));
-            Entity entity = Functions.createTree(properties[TREE_ID],
+            Entity entity = Factory.createTree(properties[TREE_ID],
                     pt,
                     Integer.parseInt(properties[TREE_ACTION_PERIOD]),
                     Integer.parseInt(properties[TREE_ANIMATION_PERIOD]),
@@ -360,7 +266,7 @@ public final class Functions
         if (properties.length == OBSTACLE_NUM_PROPERTIES) {
             Point pt = new Point(Integer.parseInt(properties[OBSTACLE_COL]),
                     Integer.parseInt(properties[OBSTACLE_ROW]));
-            Entity entity = createObstacle(properties[OBSTACLE_ID], pt,
+            Entity entity = Factory.createObstacle(properties[OBSTACLE_ID], pt,
                     Integer.parseInt(properties[OBSTACLE_ANIMATION_PERIOD]),
                     imageStore.getImageList(
                             OBSTACLE_KEY));
@@ -376,7 +282,7 @@ public final class Functions
         if (properties.length == HOUSE_NUM_PROPERTIES) {
             Point pt = new Point(Integer.parseInt(properties[HOUSE_COL]),
                     Integer.parseInt(properties[HOUSE_ROW]));
-            Entity entity = createHouse(properties[HOUSE_ID], pt,
+            Entity entity = Factory.createHouse(properties[HOUSE_ID], pt,
                     imageStore.getImageList(
                             HOUSE_KEY));
             world.tryAddEntity(entity);

@@ -2,7 +2,7 @@ import processing.core.PImage;
 
 import java.util.*;
 
-public class Fairy implements Entity {
+public class Fairy implements ActionEntity {
     private final String id;
     private Point position;
     private final List<PImage> images;
@@ -38,19 +38,19 @@ public class Fairy implements Entity {
             this.position = position;
         }
 
-        public void executeFairyActivity(
+        public void executeActivity(
                 WorldModel world,
                 ImageStore imageStore,
                 EventScheduler scheduler)
         {
             Optional<Entity> fairyTarget =
-                    world.findNearest( this.position, new ArrayList<>(Arrays.asList(EntityKind.STUMP)));
+                    world.findNearest( this.position, new ArrayList<>(Arrays.asList(Stump.class)));
 
             if (fairyTarget.isPresent()) {
                 Point tgtPos = fairyTarget.get().getPosition();
 
                 if (moveToFairy(world, fairyTarget.get(), scheduler)) {
-                    Entity sapling = Functions.createSapling("sapling_" + this.id, tgtPos,
+                    Entity sapling = Factory.createSapling("sapling_" + this.id, tgtPos,
                             imageStore.getImageList(Functions.SAPLING_KEY));
 
                     world.addEntity(sapling);
@@ -59,7 +59,7 @@ public class Fairy implements Entity {
             }
 
             scheduler.scheduleEvent(this,
-                    Functions.createActivityAction(this, world, imageStore),
+                    Factory.createActivityAction(this, world, imageStore),
                     this.actionPeriod);
         }
 
@@ -87,10 +87,10 @@ public class Fairy implements Entity {
                 ImageStore imageStore)
         {
                     scheduler.scheduleEvent(this,
-                            Functions.createActivityAction(this,world, imageStore),
+                            Factory.createActivityAction(this,world, imageStore),
                             this.actionPeriod);
                     scheduler.scheduleEvent(this,
-                            Functions.createAnimationAction(this,0),
+                            Factory.createAnimationAction(this,0),
                             getAnimationPeriod());
 
 

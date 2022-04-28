@@ -15,9 +15,10 @@ public class House implements Entity {
         this.images = images;
     }
 
-    public String getId(){
+    public String getId() {
         return id;
     }
+
     public Point getPosition() {
         return position;
     }
@@ -26,4 +27,8 @@ public class House implements Entity {
         this.position = position;
     }
 
+    public PImage getCurrentImage() {
+        return images.get(0);
+
+    }
 }

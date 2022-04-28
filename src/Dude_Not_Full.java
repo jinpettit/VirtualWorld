@@ -2,7 +2,7 @@ import processing.core.PImage;
 
 import java.util.*;
 
-public class Dude_Not_Full implements Entity{
+public class Dude_Not_Full implements ActionEntity{
         private final String id;
         private Point position;
         private final List<PImage> images;
@@ -44,13 +44,13 @@ public class Dude_Not_Full implements Entity{
             this.position = position;
         }
 
-        public void executeDudeNotFullActivity(
+        public void executeActivity(
                 WorldModel world,
                 ImageStore imageStore,
                 EventScheduler scheduler)
         {
             Optional<Entity> target =
-                    world.findNearest(this.position, new ArrayList<>(Arrays.asList(EntityKind.TREE, EntityKind.SAPLING)));
+                    world.findNearest(this.position, new ArrayList<>(Arrays.asList(Tree.class, Sapling.class)));
 
             if (!target.isPresent() || !moveToNotFull(world,
                     target.get(),
@@ -58,7 +58,7 @@ public class Dude_Not_Full implements Entity{
                     || !transformNotFull(world, scheduler, imageStore))
             {
                 scheduler.scheduleEvent(this,
-                        Functions.createActivityAction(this,world, imageStore),
+                        Factory.createActivityAction(this,world, imageStore),
                         this.actionPeriod);
             }
         }
@@ -69,7 +69,7 @@ public class Dude_Not_Full implements Entity{
                 ImageStore imageStore)
         {
             if (this.resourceCount >= this.resourceLimit) {
-                Entity miner = Functions.createDudeFull(this.id,
+                AnimationEntity miner = Factory.createDudeFull(this.id,
                         this.position, this.actionPeriod,
                         this.animationPeriod,
                         this.resourceLimit,
@@ -79,7 +79,7 @@ public class Dude_Not_Full implements Entity{
                 scheduler.unscheduleAllEvents(this);
 
                 world.addEntity(miner);
-                ((Dude_Not_Full)miner).scheduleActions(scheduler, world, imageStore);
+                miner.scheduleActions(scheduler, world, imageStore);
 
                 return true;
             }
@@ -112,10 +112,10 @@ public class Dude_Not_Full implements Entity{
                 ImageStore imageStore)
         {
                     scheduler.scheduleEvent(this,
-                            Functions.createActivityAction(this,world, imageStore),
+                            Factory.createActivityAction(this,world, imageStore),
                             this.actionPeriod);
                     scheduler.scheduleEvent(this,
-                            Functions.createAnimationAction(this,0),
+                            Factory.createAnimationAction(this,0),
                             getAnimationPeriod());
 
 
@@ -136,12 +136,13 @@ public class Dude_Not_Full implements Entity{
 
         private boolean moveToNotFull(
                 WorldModel world,
-                Entity target,
+                TreeEntity target,
                 EventScheduler scheduler)
         {
             if (this.position.adjacent(target.getPosition())) {
                 this.resourceCount += 1;
-                target.health--;
+                int x = target.getHealth();
+                x--;
                 return true;
             }
             else {

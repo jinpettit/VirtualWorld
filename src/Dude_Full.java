@@ -2,7 +2,7 @@ import java.util.*;
 
 import processing.core.PImage;
 
-public class Dude_Full implements AnimationEntity{
+public class Dude_Full implements ActionEntity{
         private final String id;
         private Point position;
         private final List<PImage> images;
@@ -43,13 +43,13 @@ public class Dude_Full implements AnimationEntity{
             this.position = position;
         }
 
-        public void executeDudeFullActivity(
+        public void executeActivity(
                 WorldModel world,
                 ImageStore imageStore,
                 EventScheduler scheduler)
         {
             Optional<Entity> fullTarget =
-                    world.findNearest(this.position, new ArrayList<>(Arrays.asList(EntityKind.HOUSE)));
+                    world.findNearest(this.position, new ArrayList<>(Arrays.asList(House.class)));
 
             if (fullTarget.isPresent() && moveToFull(world,
                     fullTarget.get(), scheduler))
@@ -58,7 +58,7 @@ public class Dude_Full implements AnimationEntity{
             }
             else {
                 scheduler.scheduleEvent(this,
-                        Functions.createActivityAction(this,world, imageStore),
+                        Factory.createActivityAction(this,world, imageStore),
                         this.actionPeriod);
             }
         }
@@ -69,7 +69,7 @@ public class Dude_Full implements AnimationEntity{
                 EventScheduler scheduler,
                 ImageStore imageStore)
         {
-            Entity miner = Functions.createDudeNotFull(this.id,
+            Entity miner = Factory.createDudeNotFull(this.id,
                     this.position, this.actionPeriod,
                     this.animationPeriod,
                     this.resourceLimit,
@@ -124,10 +124,10 @@ public class Dude_Full implements AnimationEntity{
                 ImageStore imageStore)
         {
                     scheduler.scheduleEvent(this,
-                            Functions.createActivityAction(this, world, imageStore),
+                            Factory.createActivityAction(this, world, imageStore),
                             this.actionPeriod);
                     scheduler.scheduleEvent(this,
-                            Functions.createAnimationAction(this,0),
+                            Factory.createAnimationAction(this,0),
                             getAnimationPeriod());
             }
 

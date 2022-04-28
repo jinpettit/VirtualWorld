@@ -2,7 +2,7 @@ import processing.core.PImage;
 
 import java.util.*;
 
-public class Sapling implements Entity {
+public class Sapling implements ActionEntity, TreeEntity {
         private final String id;
         private Point position;
         private final List<PImage> images;
@@ -56,7 +56,7 @@ public class Sapling implements Entity {
             return health;
         }
 
-        public void executeSaplingActivity(
+        public void executeActivity(
                 WorldModel world,
                 ImageStore imageStore,
                 EventScheduler scheduler)
@@ -65,7 +65,7 @@ public class Sapling implements Entity {
             if (!transformPlant(world, scheduler, imageStore))
             {
                 scheduler.scheduleEvent(this,
-                        Functions.createActivityAction(this, world, imageStore),
+                        Factory.createActivityAction(this, world, imageStore),
                         this.actionPeriod);
             }
         }
@@ -76,10 +76,10 @@ public class Sapling implements Entity {
                 ImageStore imageStore)
         {
                     scheduler.scheduleEvent(this,
-                            Functions.createActivityAction(this,world, imageStore),
+                            Factory.createActivityAction(this,world, imageStore),
                             this.actionPeriod);
                     scheduler.scheduleEvent(this,
-                            Functions.createAnimationAction(this,0),
+                            Factory.createAnimationAction(this,0),
                             getAnimationPeriod());
         }
 
@@ -94,12 +94,12 @@ public class Sapling implements Entity {
             this.imageIndex = (this.imageIndex + 1) % this.images.size();
         }
 
-        private boolean transformPlant( WorldModel world,
-                                        EventScheduler scheduler,
-                                        ImageStore imageStore)
-        {
-                return transformSapling(world, scheduler, imageStore);
-        }
+        public boolean transformPlant( WorldModel world,
+                                    EventScheduler scheduler,
+                                    ImageStore imageStore)
+    {
+            return transformSapling(world, scheduler, imageStore);
+    }
 
         private boolean transformSapling(
                 WorldModel world,
@@ -107,7 +107,7 @@ public class Sapling implements Entity {
                 ImageStore imageStore)
         {
             if (this.health <= 0) {
-                Entity stump = Functions.createStump(this.id,
+                Entity stump = Factory.createStump(this.id,
                         this.position,
                         imageStore.getImageList(Functions.STUMP_KEY));
 
@@ -121,7 +121,7 @@ public class Sapling implements Entity {
             }
             else if (this.health >= this.healthLimit)
             {
-                Entity tree = Functions.createTree("tree_" + this.id,
+                Entity tree = Factory.createTree("tree_" + this.id,
                         this.position,
                         this.getNumFromRange(TREE_ACTION_MAX, TREE_ACTION_MIN),
                         this.getNumFromRange(TREE_ANIMATION_MAX, TREE_ANIMATION_MIN),

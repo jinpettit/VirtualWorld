@@ -44,7 +44,7 @@ public class Obstacle implements AnimationEntity{
             ImageStore imageStore) {
 
         scheduler.scheduleEvent(this,
-                Functions.createAnimationAction(this, 0),
+                Factory.createAnimationAction(this, 0),
                 getAnimationPeriod());
         }
 
