@@ -2,7 +2,7 @@ import processing.core.PImage;
 
 import java.util.*;
 
-public class Dude_Not_Full implements ActionEntity,AnimationEntity{
+public class Dude_Not_Full implements ActionEntity,AnimationEntity, Move{
         private final String id;
         private Point position;
         private final List<PImage> images;
@@ -87,8 +87,6 @@ public class Dude_Not_Full implements ActionEntity,AnimationEntity{
             return false;
         }
 
-
-
         public Point nextPosition(
                 WorldModel world, Point destPos)
         {
@@ -141,7 +139,7 @@ public class Dude_Not_Full implements ActionEntity,AnimationEntity{
         {
             if (this.position.adjacent(target.getPosition())) {
                 this.resourceCount += 1;
-                target.setHealth((target).getHealth() - 1);
+                target.setHealth(target.getHealth() - 1);
                 return true;
             }
             else {

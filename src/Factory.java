@@ -15,7 +15,7 @@ public class Factory {
     public static Action createActivityAction(ActionEntity entity,
                                               WorldModel world, ImageStore imageStore)
     {
-        return new ActivityAction(entity, world, imageStore, 0);
+        return new ActivityAction(entity, world, imageStore);
     }
 
     public static AnimationEntity createTree(

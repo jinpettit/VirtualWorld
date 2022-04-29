@@ -51,7 +51,7 @@ public class Fairy implements ActionEntity,AnimationEntity, Move{
 
                 if (moveToFairy(world, fairyTarget.get(), scheduler)) {
                     AnimationEntity sapling = Factory.createSapling("sapling_" + this.id, tgtPos,
-                            imageStore.getImageList(Functions.SAPLING_KEY));
+                            imageStore.getImageList(Parse.SAPLING_KEY));
 
                     world.addEntity(sapling);
                     sapling.scheduleActions(scheduler, world, imageStore);

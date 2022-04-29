@@ -99,7 +99,7 @@ public class Tree implements ActionEntity,AnimationEntity, TreeEntity{
         if (this.health <= 0) {
             Entity stump = Factory.createStump(this.id,
                     this.position,
-                    imageStore.getImageList(Functions.STUMP_KEY));
+                    imageStore.getImageList(Parse.STUMP_KEY));
 
             world.removeEntity(this);
             scheduler.unscheduleAllEvents(this);
