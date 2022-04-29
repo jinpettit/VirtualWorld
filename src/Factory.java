@@ -7,7 +7,7 @@ public class Factory {
     public static final int SAPLING_HEALTH_LIMIT = 5;
     public static final int SAPLING_ACTION_ANIMATION_PERIOD = 1000; // have to be in sync since grows and gains health at same time
 
-    public static Action createAnimationAction(AnimationEntity   entity, int repeatCount) {
+    public static Action createAnimationAction(AnimationEntity entity, int repeatCount) {
         return new AnimationAction(entity,
                 repeatCount);
     }
