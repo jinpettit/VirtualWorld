@@ -2,7 +2,7 @@ import java.util.*;
 
 import processing.core.PImage;
 
-public class Dude_Full implements ActionEntity,AnimationEntity, Move{
+public class Dude_Full implements ActionEntity,AnimationEntity, Position{
         private final String id;
         private Point position;
         private final List<PImage> images;
@@ -64,7 +64,7 @@ public class Dude_Full implements ActionEntity,AnimationEntity, Move{
         }
 
 
-        public void transformFull(
+        private void transformFull(
                 WorldModel world,
                 EventScheduler scheduler,
                 ImageStore imageStore)
@@ -125,7 +125,7 @@ public class Dude_Full implements ActionEntity,AnimationEntity, Move{
             this.imageIndex = (this.imageIndex + 1) % this.images.size();
         }
 
-        public boolean moveToFull(
+        private boolean moveToFull(
                 WorldModel world,
                 Entity target,
                 EventScheduler scheduler)

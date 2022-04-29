@@ -2,7 +2,7 @@ import processing.core.PImage;
 
 import java.util.*;
 
-public class Fairy implements ActionEntity,AnimationEntity, Move{
+public class Fairy implements ActionEntity,AnimationEntity, Position{
     private final String id;
     private Point position;
     private final List<PImage> images;
@@ -106,7 +106,7 @@ public class Fairy implements ActionEntity,AnimationEntity, Move{
         }
 
 
-        public boolean moveToFairy(
+        private boolean moveToFairy(
                 WorldModel world,
                 Entity target,
                 EventScheduler scheduler)

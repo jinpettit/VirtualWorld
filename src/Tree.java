@@ -89,13 +89,6 @@ public class Tree implements ActionEntity,AnimationEntity, TreeEntity{
 
 
     public boolean transformPlant(WorldModel world, EventScheduler scheduler, ImageStore imageStore) {
-            return transformTree(world, scheduler, imageStore);
-    }
-
-    private boolean transformTree(
-            WorldModel world,
-            EventScheduler scheduler,
-            ImageStore imageStore) {
         if (this.health <= 0) {
             Entity stump = Factory.createStump(this.id,
                     this.position,
@@ -111,5 +104,6 @@ public class Tree implements ActionEntity,AnimationEntity, TreeEntity{
 
         return false;
     }
+
 }
 

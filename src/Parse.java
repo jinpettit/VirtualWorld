@@ -20,6 +20,7 @@ public class Parse {
     private static final int DUDE_LIMIT = 4;
     private static final int DUDE_ACTION_PERIOD = 5;
     private static final int DUDE_ANIMATION_PERIOD = 6;
+
     public static final String SAPLING_KEY = "sapling";
     public static final int SAPLING_HEALTH_LIMIT = 5;
     public static final int SAPLING_ACTION_ANIMATION_PERIOD = 1000; // have to be in sync since grows and gains health at same time
@@ -108,7 +109,7 @@ public class Parse {
         if (properties.length == FAIRY_NUM_PROPERTIES) {
             Point pt = new Point(Integer.parseInt(properties[FAIRY_COL]),
                     Integer.parseInt(properties[FAIRY_ROW]));
-            Entity entity = Factory.createFairy(properties[FAIRY_ID],
+            AnimationEntity entity = Factory.createFairy(properties[FAIRY_ID],
                     pt,
                     Integer.parseInt(properties[FAIRY_ACTION_PERIOD]),
                     Integer.parseInt(properties[FAIRY_ANIMATION_PERIOD]),

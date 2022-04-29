@@ -87,7 +87,7 @@ public class Factory {
                 animationPeriod);
     }
 
-    public static Entity createFairy(
+    public static AnimationEntity createFairy(
             String id,
             Point position,
             int actionPeriod,

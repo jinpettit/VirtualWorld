@@ -98,46 +98,39 @@ public class Sapling implements ActionEntity,AnimationEntity, TreeEntity {
                                     EventScheduler scheduler,
                                     ImageStore imageStore)
     {
-            return transformSapling(world, scheduler, imageStore);
+        if (this.health <= 0) {
+            Entity stump = Factory.createStump(this.id,
+                    this.position,
+                    imageStore.getImageList(Parse.STUMP_KEY));
+
+            world.removeEntity(this);
+            scheduler.unscheduleAllEvents(this);
+
+            world.addEntity(stump);
+
+            return true;
+        }
+        else if (this.health >= this.healthLimit)
+        {
+            AnimationEntity tree = Factory.createTree("tree_" + this.id,
+                    this.position,
+                    this.getNumFromRange(TREE_ACTION_MAX, TREE_ACTION_MIN),
+                    this.getNumFromRange(TREE_ANIMATION_MAX, TREE_ANIMATION_MIN),
+                    this.getNumFromRange(TREE_HEALTH_MAX, TREE_HEALTH_MIN),
+                    imageStore.getImageList(Parse.TREE_KEY));
+
+            world.removeEntity(this);
+            scheduler.unscheduleAllEvents(this);
+
+            world.addEntity(tree);
+            tree.scheduleActions(scheduler, world, imageStore);
+
+            return true;
+        }
+
+        return false;
     }
 
-        private boolean transformSapling(
-                WorldModel world,
-                EventScheduler scheduler,
-                ImageStore imageStore)
-        {
-            if (this.health <= 0) {
-                Entity stump = Factory.createStump(this.id,
-                        this.position,
-                        imageStore.getImageList(Parse.STUMP_KEY));
-
-                world.removeEntity(this);
-                scheduler.unscheduleAllEvents(this);
-
-                world.addEntity(stump);
-
-                return true;
-            }
-            else if (this.health >= this.healthLimit)
-            {
-                AnimationEntity tree = Factory.createTree("tree_" + this.id,
-                        this.position,
-                        this.getNumFromRange(TREE_ACTION_MAX, TREE_ACTION_MIN),
-                        this.getNumFromRange(TREE_ANIMATION_MAX, TREE_ANIMATION_MIN),
-                        this.getNumFromRange(TREE_HEALTH_MAX, TREE_HEALTH_MIN),
-                        imageStore.getImageList(Parse.TREE_KEY));
-
-                world.removeEntity(this);
-                scheduler.unscheduleAllEvents(this);
-
-                world.addEntity(tree);
-                tree.scheduleActions(scheduler, world, imageStore);
-
-                return true;
-            }
-
-            return false;
-        }
 
     public void setHealth(int health) {
         this.health = health;
