@@ -2,7 +2,7 @@ import java.util.*;
 
 import processing.core.PImage;
 
-public class Dude_Full implements ActionEntity{
+public class Dude_Full implements ActionEntity,AnimationEntity, Move{
         private final String id;
         private Point position;
         private final List<PImage> images;
@@ -69,7 +69,7 @@ public class Dude_Full implements ActionEntity{
                 EventScheduler scheduler,
                 ImageStore imageStore)
         {
-            Entity miner = Factory.createDudeNotFull(this.id,
+            AnimationEntity miner = Factory.createDudeNotFull(this.id,
                     this.position, this.actionPeriod,
                     this.animationPeriod,
                     this.resourceLimit,
@@ -79,28 +79,10 @@ public class Dude_Full implements ActionEntity{
             scheduler.unscheduleAllEvents(this);
 
             world.addEntity(miner);
-            ((Dude_Full)miner).scheduleActions(scheduler, world, imageStore);
+            miner.scheduleActions(scheduler, world, imageStore);
         }
 
-        private Point nextPositionFairy(
-                WorldModel world, Point destPos)
-        {
-            int horiz = Integer.signum(destPos.x - this.position.x);
-            Point newPos = new Point(this.position.x + horiz, this.position.y);
-
-            if (horiz == 0 || world.isOccupied(newPos)) {
-                int vert = Integer.signum(destPos.y - this.position.y);
-                newPos = new Point(this.position.x, this.position.y + vert);
-
-                if (vert == 0 || world.isOccupied(newPos)) {
-                    newPos = this.position;
-                }
-            }
-
-            return newPos;
-        }
-
-        private Point nextPositionDude(
+        public Point nextPosition(
                 WorldModel world, Point destPos)
         {
             int horiz = Integer.signum(destPos.x - this.position.x);
@@ -143,7 +125,7 @@ public class Dude_Full implements ActionEntity{
             this.imageIndex = (this.imageIndex + 1) % this.images.size();
         }
 
-        private boolean moveToFull(
+        public boolean moveToFull(
                 WorldModel world,
                 Entity target,
                 EventScheduler scheduler)
@@ -152,7 +134,7 @@ public class Dude_Full implements ActionEntity{
                 return true;
             }
             else {
-                Point nextPos = this.nextPositionDude(world, target.getPosition());
+                Point nextPos = this.nextPosition(world, target.getPosition());
 
                 if (!this.position.equals(nextPos)) {
                     Optional<Entity> occupant = world.getOccupant(nextPos);

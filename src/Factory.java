@@ -18,7 +18,7 @@ public class Factory {
         return new ActivityAction(entity, world, imageStore, 0);
     }
 
-    public static Entity createTree(
+    public static AnimationEntity createTree(
             String id,
             Point position,
             int actionPeriod,
@@ -39,7 +39,7 @@ public class Factory {
     }
 
     // health starts at 0 and builds up until ready to convert to Tree
-    public static Entity createSapling(
+    public static AnimationEntity createSapling(
             String id,
             Point position,
             List<PImage> images)
@@ -50,7 +50,7 @@ public class Factory {
 
 
     // need resource count, though it always starts at 0
-    public static Entity createDudeNotFull(
+    public static AnimationEntity createDudeNotFull(
             String id,
             Point position,
             int actionPeriod,

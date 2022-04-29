@@ -2,7 +2,7 @@ import processing.core.PImage;
 
 import java.util.*;
 
-public class Dude_Not_Full implements ActionEntity{
+public class Dude_Not_Full implements ActionEntity,AnimationEntity{
         private final String id;
         private Point position;
         private final List<PImage> images;
@@ -53,7 +53,7 @@ public class Dude_Not_Full implements ActionEntity{
                     world.findNearest(this.position, new ArrayList<>(Arrays.asList(Tree.class, Sapling.class)));
 
             if (!target.isPresent() || !moveToNotFull(world,
-                    target.get(),
+                    (TreeEntity) target.get(),
                     scheduler)
                     || !transformNotFull(world, scheduler, imageStore))
             {
@@ -89,7 +89,7 @@ public class Dude_Not_Full implements ActionEntity{
 
 
 
-        private Point nextPositionDude(
+        public Point nextPosition(
                 WorldModel world, Point destPos)
         {
             int horiz = Integer.signum(destPos.x - this.position.x);
@@ -134,19 +134,18 @@ public class Dude_Not_Full implements ActionEntity{
         }
 
 
-        private boolean moveToNotFull(
+        public boolean moveToNotFull(
                 WorldModel world,
                 TreeEntity target,
                 EventScheduler scheduler)
         {
             if (this.position.adjacent(target.getPosition())) {
                 this.resourceCount += 1;
-                int x = target.getHealth();
-                x--;
+                target.setHealth((target).getHealth() - 1);
                 return true;
             }
             else {
-                Point nextPos = this.nextPositionDude(world, target.getPosition());
+                Point nextPos = this.nextPosition(world, target.getPosition());
 
                 if (!this.position.equals(nextPos)) {
                     Optional<Entity> occupant = world.getOccupant(nextPos);

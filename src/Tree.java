@@ -2,7 +2,7 @@ import processing.core.PImage;
 
 import java.util.*;
 
-public class Tree implements ActionEntity, TreeEntity{
+public class Tree implements ActionEntity,AnimationEntity, TreeEntity{
     private final String id;
     private Point position;
     private final List<PImage> images;
@@ -10,8 +10,6 @@ public class Tree implements ActionEntity, TreeEntity{
     private final int actionPeriod;
     private final int animationPeriod;
     private int health;
-
-    private static final Random rand = new Random();
 
     public Tree(
             String id,
@@ -43,6 +41,10 @@ public class Tree implements ActionEntity, TreeEntity{
 
     public int getHealth() {
         return health;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
     }
 
 
@@ -103,7 +105,6 @@ public class Tree implements ActionEntity, TreeEntity{
             scheduler.unscheduleAllEvents(this);
 
             world.addEntity(stump);
-            ((Tree)stump).scheduleActions(scheduler, world, imageStore);
 
             return true;
         }

@@ -199,7 +199,7 @@ public final class Functions
                     Integer.parseInt(properties[SAPLING_ROW]));
             String id = properties[SAPLING_ID];
             int health = Integer.parseInt(properties[SAPLING_HEALTH]);
-            Entity entity = new Entity(EntityKind.SAPLING, id, pt, imageStore.getImageList(SAPLING_KEY), 0, 0,
+            Entity entity = new Sapling(id, pt, imageStore.getImageList(SAPLING_KEY),
                     SAPLING_ACTION_ANIMATION_PERIOD, SAPLING_ACTION_ANIMATION_PERIOD, health, SAPLING_HEALTH_LIMIT);
             world.tryAddEntity(entity);
         }

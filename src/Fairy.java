@@ -2,7 +2,7 @@ import processing.core.PImage;
 
 import java.util.*;
 
-public class Fairy implements ActionEntity {
+public class Fairy implements ActionEntity,AnimationEntity, Move{
     private final String id;
     private Point position;
     private final List<PImage> images;
@@ -50,11 +50,11 @@ public class Fairy implements ActionEntity {
                 Point tgtPos = fairyTarget.get().getPosition();
 
                 if (moveToFairy(world, fairyTarget.get(), scheduler)) {
-                    Entity sapling = Factory.createSapling("sapling_" + this.id, tgtPos,
+                    AnimationEntity sapling = Factory.createSapling("sapling_" + this.id, tgtPos,
                             imageStore.getImageList(Functions.SAPLING_KEY));
 
                     world.addEntity(sapling);
-                    ((Fairy)sapling).scheduleActions(scheduler, world, imageStore);
+                    sapling.scheduleActions(scheduler, world, imageStore);
                 }
             }
 
@@ -63,7 +63,7 @@ public class Fairy implements ActionEntity {
                     this.actionPeriod);
         }
 
-        private Point nextPositionFairy(
+        public Point nextPosition(
                 WorldModel world, Point destPos)
         {
             int horiz = Integer.signum(destPos.x - this.position.x);
@@ -92,8 +92,6 @@ public class Fairy implements ActionEntity {
                     scheduler.scheduleEvent(this,
                             Factory.createAnimationAction(this,0),
                             getAnimationPeriod());
-
-
             }
 
         public PImage getCurrentImage() {
@@ -108,7 +106,7 @@ public class Fairy implements ActionEntity {
         }
 
 
-        private boolean moveToFairy(
+        public boolean moveToFairy(
                 WorldModel world,
                 Entity target,
                 EventScheduler scheduler)
@@ -119,7 +117,7 @@ public class Fairy implements ActionEntity {
                 return true;
             }
             else {
-                Point nextPos = this.nextPositionFairy(world, target.getPosition());
+                Point nextPos = this.nextPosition(world, target.getPosition());
 
                 if (!this.position.equals(nextPos)) {
                     Optional<Entity> occupant = world.getOccupant(nextPos);

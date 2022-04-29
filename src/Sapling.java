@@ -2,7 +2,7 @@ import processing.core.PImage;
 
 import java.util.*;
 
-public class Sapling implements ActionEntity, TreeEntity {
+public class Sapling implements ActionEntity,AnimationEntity, TreeEntity {
         private final String id;
         private Point position;
         private final List<PImage> images;
@@ -115,13 +115,12 @@ public class Sapling implements ActionEntity, TreeEntity {
                 scheduler.unscheduleAllEvents(this);
 
                 world.addEntity(stump);
-                ((Sapling)stump).scheduleActions(scheduler, world, imageStore);
 
                 return true;
             }
             else if (this.health >= this.healthLimit)
             {
-                Entity tree = Factory.createTree("tree_" + this.id,
+                AnimationEntity tree = Factory.createTree("tree_" + this.id,
                         this.position,
                         this.getNumFromRange(TREE_ACTION_MAX, TREE_ACTION_MIN),
                         this.getNumFromRange(TREE_ANIMATION_MAX, TREE_ANIMATION_MIN),
@@ -132,13 +131,17 @@ public class Sapling implements ActionEntity, TreeEntity {
                 scheduler.unscheduleAllEvents(this);
 
                 world.addEntity(tree);
-                ((Sapling)tree).scheduleActions(scheduler, world, imageStore);
+                tree.scheduleActions(scheduler, world, imageStore);
 
                 return true;
             }
 
             return false;
         }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
 
 
         private static int getNumFromRange(int max, int min)

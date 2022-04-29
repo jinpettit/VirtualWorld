@@ -1,3 +1,3 @@
-public interface ActionEntity extends AnimationEntity {
+public interface ActionEntity extends Entity {
     void executeActivity(WorldModel world, ImageStore imageStore, EventScheduler scheduler);
 }
