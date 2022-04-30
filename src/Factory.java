@@ -4,9 +4,6 @@ import java.util.List;
 
 public class Factory {
 
-    public static final int SAPLING_HEALTH_LIMIT = 5;
-    public static final int SAPLING_ACTION_ANIMATION_PERIOD = 1000; // have to be in sync since grows and gains health at same time
-
     public static Action createAnimationAction(AnimationEntity entity, int repeatCount) {
         return new AnimationAction(entity,
                 repeatCount);
@@ -45,7 +42,7 @@ public class Factory {
             List<PImage> images)
     {
         return new Sapling(id, position, images,
-                SAPLING_ACTION_ANIMATION_PERIOD, SAPLING_ACTION_ANIMATION_PERIOD, 0, SAPLING_HEALTH_LIMIT);
+                Parse.SAPLING_ACTION_ANIMATION_PERIOD, Parse.SAPLING_ACTION_ANIMATION_PERIOD, 0, Parse.SAPLING_HEALTH_LIMIT);
     }
 
 
