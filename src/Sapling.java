@@ -2,7 +2,7 @@ import processing.core.PImage;
 
 import java.util.*;
 
-public class Sapling implements ActionEntity,AnimationEntity, TreeEntity {
+public class Sapling implements ActionEntity, TreeEntity {
         private final String id;
         private Point position;
         private final List<PImage> images;

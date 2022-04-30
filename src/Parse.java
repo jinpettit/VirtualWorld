@@ -1,4 +1,8 @@
+import java.util.Scanner;
+
 public class Parse {
+    private static final int PROPERTY_KEY = 0;
+
     public static final String BGND_KEY = "background";
     private static final int BGND_NUM_PROPERTIES = 4;
     private static final int BGND_ID = 1;
@@ -167,5 +171,57 @@ public class Parse {
         }
 
         return properties.length == HOUSE_NUM_PROPERTIES;
+    }
+
+    public static void load(
+            Scanner in, WorldModel world, ImageStore imageStore)
+    {
+        int lineNumber = 0;
+        while (in.hasNextLine()) {
+            try {
+                if (!processLine(in.nextLine(), world, imageStore)) {
+                    System.err.println(String.format("invalid entry on line %d",
+                            lineNumber));
+                }
+            }
+            catch (NumberFormatException e) {
+                System.err.println(
+                        String.format("invalid entry on line %d", lineNumber));
+            }
+            catch (IllegalArgumentException e) {
+                System.err.println(
+                        String.format("issue on line %d: %s", lineNumber,
+                                e.getMessage()));
+            }
+            lineNumber++;
+        }
+    }
+
+
+
+    private static boolean processLine(
+            String line, WorldModel world, ImageStore imageStore)
+    {
+        String[] properties = line.split("\\s");
+        if (properties.length > 0) {
+            switch (properties[PROPERTY_KEY]) {
+                case BGND_KEY:
+                    return parseBackground(properties, world, imageStore);
+                case DUDE_KEY:
+                    return parseDude(properties, world, imageStore);
+                case OBSTACLE_KEY:
+                    return parseObstacle(properties, world, imageStore);
+                case FAIRY_KEY:
+                    return parseFairy(properties, world, imageStore);
+                case HOUSE_KEY:
+                    return parseHouse(properties, world, imageStore);
+                case TREE_KEY:
+                    return parseTree(properties, world, imageStore);
+                case SAPLING_KEY:
+                    return parseSapling(properties, world, imageStore);
+            }
+        }
+
+        return false;
     }
 }

@@ -2,7 +2,7 @@ import processing.core.PImage;
 
 import java.util.*;
 
-public class Tree implements ActionEntity,AnimationEntity, TreeEntity{
+public class Tree implements ActionEntity, TreeEntity{
     private final String id;
     private Point position;
     private final List<PImage> images;

@@ -18,7 +18,7 @@ public class Factory {
         return new ActivityAction(entity, world, imageStore);
     }
 
-    public static AnimationEntity createTree(
+    public static ActionEntity createTree(
             String id,
             Point position,
             int actionPeriod,
@@ -39,7 +39,7 @@ public class Factory {
     }
 
     // health starts at 0 and builds up until ready to convert to Tree
-    public static AnimationEntity createSapling(
+    public static ActionEntity createSapling(
             String id,
             Point position,
             List<PImage> images)
@@ -50,7 +50,7 @@ public class Factory {
 
 
     // need resource count, though it always starts at 0
-    public static AnimationEntity createDudeNotFull(
+    public static ActionEntity createDudeNotFull(
             String id,
             Point position,
             int actionPeriod,
@@ -63,14 +63,14 @@ public class Factory {
     }
 
     // don't technically need resource count ... full
-    public static AnimationEntity createDudeFull(
+    public static ActionEntity createDudeFull(
             String id,
             Point position,
             int actionPeriod,
             int animationPeriod,
             int resourceLimit,
             List<PImage> images) {
-        return new Dude_Full(id, position, images, resourceLimit, 0,
+        return new Dude_Full(id, position, images, resourceLimit,
                 actionPeriod, animationPeriod);
     }
 
@@ -80,14 +80,14 @@ public class Factory {
         return new House(id, position, images);
     }
 
-    public static Entity createObstacle(
+    public static AnimationEntity createObstacle(
             String id, Point position, int animationPeriod, List<PImage> images)
     {
         return new Obstacle(id, position, images,
                 animationPeriod);
     }
 
-    public static AnimationEntity createFairy(
+    public static ActionEntity createFairy(
             String id,
             Point position,
             int actionPeriod,

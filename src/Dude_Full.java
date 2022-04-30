@@ -2,13 +2,12 @@ import java.util.*;
 
 import processing.core.PImage;
 
-public class Dude_Full implements ActionEntity,AnimationEntity, Position{
+public class Dude_Full implements ActionEntity, Position{
         private final String id;
         private Point position;
         private final List<PImage> images;
         private int imageIndex;
         private final int resourceLimit;
-        private int resourceCount;
         private final int actionPeriod;
         private final int animationPeriod;
 
@@ -17,7 +16,6 @@ public class Dude_Full implements ActionEntity,AnimationEntity, Position{
                 Point position,
                 List<PImage> images,
                 int resourceLimit,
-                int resourceCount,
                 int actionPeriod,
                 int animationPeriod)
         {
@@ -26,7 +24,6 @@ public class Dude_Full implements ActionEntity,AnimationEntity, Position{
             this.images = images;
             this.imageIndex = 0;
             this.resourceLimit = resourceLimit;
-            this.resourceCount = resourceCount;
             this.actionPeriod = actionPeriod;
             this.animationPeriod = animationPeriod;
         }

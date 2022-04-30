@@ -23,7 +23,7 @@ final class ImageStore
         int lineNumber = 0;
         while (in.hasNextLine()) {
             try {
-                Functions.processImageLine(this.images, in.nextLine(), screen);
+                Process.processImageLine(this.images, in.nextLine(), screen);
             }
             catch (NumberFormatException e) {
                 System.out.println(

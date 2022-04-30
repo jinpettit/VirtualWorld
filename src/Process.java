@@ -8,15 +8,13 @@ import processing.core.PApplet;
  * You will reduce the size of this class over the next several weeks
  * by refactoring this codebase to follow an OOP style.
  */
-public final class Functions
+public final class Process
 {
     private static final int COLOR_MASK = 0xffffff;
     private static final int KEYED_IMAGE_MIN = 5;
     private static final int KEYED_RED_IDX = 2;
     private static final int KEYED_GREEN_IDX = 3;
     private static final int KEYED_BLUE_IDX = 4;
-
-    private static final int PROPERTY_KEY = 0;
 
     public static final List<String> PATH_KEYS = new ArrayList<>(Arrays.asList("bridge", "dirt", "dirt_horiz", "dirt_vert_left", "dirt_vert_right",
             "dirt_bot_left_corner", "dirt_bot_right_up", "dirt_vert_left_bot"));
@@ -68,58 +66,6 @@ public final class Functions
             }
         }
         img.updatePixels();
-    }
-
-    public static void load(
-            Scanner in, WorldModel world, ImageStore imageStore)
-    {
-        int lineNumber = 0;
-        while (in.hasNextLine()) {
-            try {
-                if (!processLine(in.nextLine(), world, imageStore)) {
-                    System.err.println(String.format("invalid entry on line %d",
-                                                     lineNumber));
-                }
-            }
-            catch (NumberFormatException e) {
-                System.err.println(
-                        String.format("invalid entry on line %d", lineNumber));
-            }
-            catch (IllegalArgumentException e) {
-                System.err.println(
-                        String.format("issue on line %d: %s", lineNumber,
-                                      e.getMessage()));
-            }
-            lineNumber++;
-        }
-    }
-
-
-
-    private static boolean processLine(
-            String line, WorldModel world, ImageStore imageStore)
-    {
-        String[] properties = line.split("\\s");
-        if (properties.length > 0) {
-            switch (properties[PROPERTY_KEY]) {
-                case Parse.BGND_KEY:
-                    return Parse.parseBackground(properties, world, imageStore);
-                case Parse.DUDE_KEY:
-                    return Parse.parseDude(properties, world, imageStore);
-                case Parse.OBSTACLE_KEY:
-                    return Parse.parseObstacle(properties, world, imageStore);
-                case Parse.FAIRY_KEY:
-                    return Parse.parseFairy(properties, world, imageStore);
-                case Parse.HOUSE_KEY:
-                    return Parse.parseHouse(properties, world, imageStore);
-                case Parse.TREE_KEY:
-                    return Parse.parseTree(properties, world, imageStore);
-                case Parse.SAPLING_KEY:
-                    return Parse.parseSapling(properties, world, imageStore);
-            }
-        }
-
-        return false;
     }
 
 }

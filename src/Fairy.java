@@ -2,7 +2,7 @@ import processing.core.PImage;
 
 import java.util.*;
 
-public class Fairy implements ActionEntity,AnimationEntity, Position{
+public class Fairy implements ActionEntity, Position{
     private final String id;
     private Point position;
     private final List<PImage> images;
