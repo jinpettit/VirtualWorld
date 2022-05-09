@@ -1,7 +1,7 @@
 import processing.core.PImage;
 import java.util.*;
 
-public class Stump implements Entity {
+public class Stump extends Entity {
     private final String id;
     private Point position;
     private final List<PImage> images;

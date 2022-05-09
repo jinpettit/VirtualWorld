@@ -2,7 +2,7 @@ import processing.core.PImage;
 
 import java.util.*;
 
-public class Obstacle implements AnimationEntity{
+public class Obstacle extends AnimationEntity{
     private final String id;
     private Point position;
     private final List<PImage> images;

@@ -1,3 +1,3 @@
-public interface ActionEntity extends AnimationEntity{
-    void executeActivity(WorldModel world, ImageStore imageStore, EventScheduler scheduler);
+public abstract class ActionEntity extends AnimationEntity{
+   abstract void executeActivity(WorldModel world, ImageStore imageStore, EventScheduler scheduler);
 }

@@ -2,7 +2,7 @@ import java.util.*;
 
 import processing.core.PImage;
 
-public class Dude_Full implements ActionEntity, Position{
+public class Dude_Full extends Position{
         private final String id;
         private Point position;
         private final List<PImage> images;

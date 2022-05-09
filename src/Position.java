@@ -1,3 +1,3 @@
-public interface Position {
-    Point nextPosition(WorldModel world, Point destPos);
+public abstract class Position extends ActionEntity {
+    abstract Point nextPosition(WorldModel world, Point destPos);
 }
