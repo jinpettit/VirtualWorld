@@ -3,12 +3,6 @@ import processing.core.PImage;
 import java.util.*;
 
 public class Fairy extends Position{
-    private final String id;
-    private Point position;
-    private final List<PImage> images;
-    private int imageIndex;
-    private final int actionPeriod;
-    private final int animationPeriod;
 
         public Fairy(
                 String id,
@@ -17,25 +11,7 @@ public class Fairy extends Position{
                 int actionPeriod,
                 int animationPeriod)
         {
-            this.id = id;
-            this.position = position;
-            this.images = images;
-            this.imageIndex = 0;
-            this.actionPeriod = actionPeriod;
-            this.animationPeriod = animationPeriod;
-        }
-
-
-        public String getId(){
-            return id;
-        }
-
-        public Point getPosition() {
-            return position;
-        }
-
-        public void setPosition(Point position) {
-            this.position = position;
+            super(id, position, images, actionPeriod, animationPeriod);
         }
 
         public void executeActivity(
@@ -44,13 +20,13 @@ public class Fairy extends Position{
                 EventScheduler scheduler)
         {
             Optional<Entity> fairyTarget =
-                    world.findNearest( this.position, new ArrayList<>(Arrays.asList(Stump.class)));
+                    world.findNearest(getPosition(), new ArrayList<>(Arrays.asList(Stump.class)));
 
             if (fairyTarget.isPresent()) {
                 Point tgtPos = fairyTarget.get().getPosition();
 
-                if (moveToFairy(world, fairyTarget.get(), scheduler)) {
-                    AnimationEntity sapling = Factory.createSapling("sapling_" + this.id, tgtPos,
+                if (moveTo(world, fairyTarget.get(), scheduler)) {
+                    AnimationEntity sapling = Factory.createSapling("sapling_" + getId(), tgtPos,
                             imageStore.getImageList(Parse.SAPLING_KEY));
 
                     world.addEntity(sapling);
@@ -60,58 +36,33 @@ public class Fairy extends Position{
 
             scheduler.scheduleEvent(this,
                     Factory.createActivityAction(this, world, imageStore),
-                    this.actionPeriod);
+                    getActionPeriod());
         }
 
         public Point nextPosition(
                 WorldModel world, Point destPos)
         {
-            int horiz = Integer.signum(destPos.x - this.position.x);
-            Point newPos = new Point(this.position.x + horiz, this.position.y);
+            int horiz = Integer.signum(destPos.x - getPosition().x);
+            Point newPos = new Point(getPosition().x + horiz, getPosition().y);
 
             if (horiz == 0 || world.isOccupied(newPos)) {
-                int vert = Integer.signum(destPos.y - this.position.y);
-                newPos = new Point(this.position.x, this.position.y + vert);
+                int vert = Integer.signum(destPos.y - getPosition().y);
+                newPos = new Point(getPosition().x, getPosition().y + vert);
 
                 if (vert == 0 || world.isOccupied(newPos)) {
-                    newPos = this.position;
+                    newPos = getPosition();
                 }
             }
 
             return newPos;
         }
 
-        public void scheduleActions(
-                EventScheduler scheduler,
-                WorldModel world,
-                ImageStore imageStore)
-        {
-                    scheduler.scheduleEvent(this,
-                            Factory.createActivityAction(this,world, imageStore),
-                            this.actionPeriod);
-                    scheduler.scheduleEvent(this,
-                            Factory.createAnimationAction(this,0),
-                            getAnimationPeriod());
-            }
-
-        public PImage getCurrentImage() {
-            return (images.get(imageIndex));
-        }
-
-        public int getAnimationPeriod() {
-                    return this.animationPeriod;
-        }
-        public void nextImage() {
-            this.imageIndex = (this.imageIndex + 1) % this.images.size();
-        }
-
-
-        private boolean moveToFairy(
+        public boolean moveTo(
                 WorldModel world,
                 Entity target,
                 EventScheduler scheduler)
         {
-            if (this.position.adjacent(target.getPosition())) {
+            if (getPosition().adjacent(target.getPosition())) {
                 world.removeEntity(target);
                 scheduler.unscheduleAllEvents(target);
                 return true;
@@ -119,7 +70,7 @@ public class Fairy extends Position{
             else {
                 Point nextPos = this.nextPosition(world, target.getPosition());
 
-                if (!this.position.equals(nextPos)) {
+                if (!getPosition().equals(nextPos)) {
                     Optional<Entity> occupant = world.getOccupant(nextPos);
                     if (occupant.isPresent()) {
                         scheduler.unscheduleAllEvents(occupant.get());

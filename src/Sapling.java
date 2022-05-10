@@ -3,13 +3,6 @@ import processing.core.PImage;
 import java.util.*;
 
 public class Sapling extends TreeEntity {
-        private final String id;
-        private Point position;
-        private final List<PImage> images;
-        private int imageIndex;
-        private final int actionPeriod;
-        private final int animationPeriod;
-        private int health;
         private final int healthLimit;
 
         private static final int TREE_ANIMATION_MAX = 600;
@@ -30,30 +23,8 @@ public class Sapling extends TreeEntity {
                 int health,
                 int healthLimit)
         {
-            this.id = id;
-            this.position = position;
-            this.images = images;
-            this.imageIndex = 0;
-            this.actionPeriod = actionPeriod;
-            this.animationPeriod = animationPeriod;
-            this.health = health;
+            super(id, position, images, actionPeriod, animationPeriod, health);
             this.healthLimit = healthLimit;
-        }
-
-        public String getId(){
-            return id;
-        }
-
-        public Point getPosition() {
-            return position;
-        }
-
-        public void setPosition(Point position) {
-            this.position = position;
-        }
-
-        public int getHealth() {
-            return health;
         }
 
         public void executeActivity(
@@ -61,46 +32,22 @@ public class Sapling extends TreeEntity {
                 ImageStore imageStore,
                 EventScheduler scheduler)
         {
-            this.health++;
+            setHealth(getHealth() + 1);
             if (!transformPlant(world, scheduler, imageStore))
             {
                 scheduler.scheduleEvent(this,
                         Factory.createActivityAction(this, world, imageStore),
-                        this.actionPeriod);
+                        getActionPeriod());
             }
-        }
-
-        public void scheduleActions(
-                EventScheduler scheduler,
-                WorldModel world,
-                ImageStore imageStore)
-        {
-                    scheduler.scheduleEvent(this,
-                            Factory.createActivityAction(this,world, imageStore),
-                            this.actionPeriod);
-                    scheduler.scheduleEvent(this,
-                            Factory.createAnimationAction(this,0),
-                            getAnimationPeriod());
-        }
-
-        public PImage getCurrentImage() {
-            return (images.get(imageIndex));
-        }
-
-        public int getAnimationPeriod() {
-                    return this.animationPeriod;
-        }
-        public void nextImage() {
-            this.imageIndex = (this.imageIndex + 1) % this.images.size();
         }
 
         public boolean transformPlant( WorldModel world,
                                     EventScheduler scheduler,
                                     ImageStore imageStore)
     {
-        if (this.health <= 0) {
-            Entity stump = Factory.createStump(this.id,
-                    this.position,
+        if (getHealth() <= 0) {
+            Entity stump = Factory.createStump(getId(),
+                    getPosition(),
                     imageStore.getImageList(Parse.STUMP_KEY));
 
             world.removeEntity(this);
@@ -110,10 +57,10 @@ public class Sapling extends TreeEntity {
 
             return true;
         }
-        else if (this.health >= this.healthLimit)
+        else if (getHealth() >= this.healthLimit)
         {
-            AnimationEntity tree = Factory.createTree("tree_" + this.id,
-                    this.position,
+            AnimationEntity tree = Factory.createTree("tree_" + getId(),
+                    getPosition(),
                     this.getNumFromRange(TREE_ACTION_MAX, TREE_ACTION_MIN),
                     this.getNumFromRange(TREE_ANIMATION_MAX, TREE_ANIMATION_MIN),
                     this.getNumFromRange(TREE_HEALTH_MAX, TREE_HEALTH_MIN),
@@ -130,12 +77,6 @@ public class Sapling extends TreeEntity {
 
         return false;
     }
-
-
-    public void setHealth(int health) {
-        this.health = health;
-    }
-
 
         private static int getNumFromRange(int max, int min)
         {
