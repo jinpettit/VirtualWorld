@@ -80,7 +80,7 @@ public class Dude_Not_Full extends Dude {
             ((TreeEntity) target).setHealth(((TreeEntity) target).getHealth() - 1);
             return true;
         } else
-            return true;
+            return false;
     }
 
 }

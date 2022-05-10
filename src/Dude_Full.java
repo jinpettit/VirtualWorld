@@ -77,12 +77,5 @@ public class Dude_Full extends Dude{
             return true;
     }
 
-    protected void _transformDudeHelper(WorldModel world, EventScheduler scheduler, ImageStore imageStore) {
-        AnimationEntity miner = Factory.createDudeNotFull(getId(),
-                getPosition(), getActionPeriod(),
-                getAnimationPeriod(),
-                getResourceLimit(),
-                getImages());
-    }
 }
 
