@@ -45,7 +45,7 @@ public class Fairy extends Position{
             int horiz = Integer.signum(destPos.x - getPosition().x);
             Point newPos = new Point(getPosition().x + horiz, getPosition().y);
 
-            if (horiz == 0 || world.isOccupied(newPos)) {
+            if (horiz == 0 || world.isOccupied(newPos) ) {
                 int vert = Integer.signum(destPos.y - getPosition().y);
                 newPos = new Point(getPosition().x, getPosition().y + vert);
 
@@ -57,29 +57,9 @@ public class Fairy extends Position{
             return newPos;
         }
 
-        public boolean moveTo(
-                WorldModel world,
-                Entity target,
-                EventScheduler scheduler)
-        {
-            if (getPosition().adjacent(target.getPosition())) {
-                world.removeEntity(target);
-                scheduler.unscheduleAllEvents(target);
-                return true;
-            }
-            else {
-                Point nextPos = this.nextPosition(world, target.getPosition());
-
-                if (!getPosition().equals(nextPos)) {
-                    Optional<Entity> occupant = world.getOccupant(nextPos);
-                    if (occupant.isPresent()) {
-                        scheduler.unscheduleAllEvents(occupant.get());
-                    }
-
-                    world.moveEntity(this, nextPos);
-                }
-                return false;
-            }
-        }
-
+    protected boolean _moveToHelper(WorldModel world, Entity target, EventScheduler scheduler){
+        world.removeEntity(target);
+        scheduler.unscheduleAllEvents(target);
+        return true;
+    }
 }

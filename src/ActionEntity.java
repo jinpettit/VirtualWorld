@@ -10,7 +10,7 @@ public abstract class ActionEntity extends AnimationEntity {
       this.actionPeriod = actionPeriod;
    }
 
-   abstract void executeActivity(WorldModel world, ImageStore imageStore, EventScheduler scheduler);
+   protected abstract void executeActivity(WorldModel world, ImageStore imageStore, EventScheduler scheduler);
 
    public int getActionPeriod() {
       return actionPeriod;
@@ -24,8 +24,6 @@ public abstract class ActionEntity extends AnimationEntity {
       scheduler.scheduleEvent(this,
               Factory.createActivityAction(this,world, imageStore),
               getActionPeriod());
-      scheduler.scheduleEvent(this,
-              Factory.createAnimationAction(this,0),
-              getAnimationPeriod());
+      super.scheduleActions(scheduler, world, imageStore);
    }
 }

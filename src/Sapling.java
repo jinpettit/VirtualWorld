@@ -41,23 +41,18 @@ public class Sapling extends TreeEntity {
             }
         }
 
-        public boolean transformPlant( WorldModel world,
-                                    EventScheduler scheduler,
-                                    ImageStore imageStore)
-    {
-        if (getHealth() <= 0) {
-            Entity stump = Factory.createStump(getId(),
-                    getPosition(),
-                    imageStore.getImageList(Parse.STUMP_KEY));
-
-            world.removeEntity(this);
-            scheduler.unscheduleAllEvents(this);
-
-            world.addEntity(stump);
-
-            return true;
+        private static int getNumFromRange(int max, int min)
+        {
+            Random rand = new Random();
+            return min + rand.nextInt(
+                    max
+                            - min);
         }
-        else if (getHealth() >= this.healthLimit)
+
+         protected boolean _transformHelper(WorldModel world,
+                                                EventScheduler scheduler,
+                                                ImageStore imageStore) {
+            if (getHealth() >= this.healthLimit)
         {
             AnimationEntity tree = Factory.createTree("tree_" + getId(),
                     getPosition(),
@@ -77,12 +72,5 @@ public class Sapling extends TreeEntity {
 
         return false;
     }
+    }
 
-        private static int getNumFromRange(int max, int min)
-        {
-            Random rand = new Random();
-            return min + rand.nextInt(
-                    max
-                            - min);
-        }
-}

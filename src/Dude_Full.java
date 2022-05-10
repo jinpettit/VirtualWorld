@@ -2,19 +2,17 @@ import java.util.*;
 
 import processing.core.PImage;
 
-public class Dude_Full extends Position{
-        private final int resourceLimit;
+public class Dude_Full extends Dude{
 
         public Dude_Full(
                 String id,
                 Point position,
                 List<PImage> images,
-                int resourceLimit,
                 int animationPeriod,
-                int actionPeriod)
+                int actionPeriod,
+                int resourceLimit)
         {
-            super(id, position, images, animationPeriod, actionPeriod);
-            this.resourceLimit = resourceLimit;
+            super(id, position, images, animationPeriod, actionPeriod, resourceLimit);
         }
 
         public void executeActivity(
@@ -28,7 +26,7 @@ public class Dude_Full extends Position{
             if (fullTarget.isPresent() && moveTo(world,
                     fullTarget.get(), scheduler))
             {
-                transformFull(world, scheduler, imageStore);
+                transform(world, scheduler, imageStore);
             }
             else {
                 scheduler.scheduleEvent(this,
@@ -37,8 +35,7 @@ public class Dude_Full extends Position{
             }
         }
 
-
-        private void transformFull(
+        public boolean transform(
                 WorldModel world,
                 EventScheduler scheduler,
                 ImageStore imageStore)
@@ -46,7 +43,7 @@ public class Dude_Full extends Position{
             AnimationEntity miner = Factory.createDudeNotFull(getId(),
                     getPosition(), getActionPeriod(),
                     getAnimationPeriod(),
-                    this.resourceLimit,
+                    getResourceLimit(),
                     getImages());
 
             world.removeEntity(this);
@@ -54,6 +51,8 @@ public class Dude_Full extends Position{
 
             world.addEntity(miner);
             miner.scheduleActions(scheduler, world, imageStore);
+
+            return true;
         }
 
         public Point nextPosition(
@@ -74,28 +73,16 @@ public class Dude_Full extends Position{
             return newPos;
         }
 
-        public boolean moveTo(
-                WorldModel world,
-                Entity target,
-                EventScheduler scheduler)
-        {
-            if (getPosition().adjacent(target.getPosition())) {
-                return true;
-            }
-            else {
-                Point nextPos = this.nextPosition(world, target.getPosition());
+    protected boolean _moveToHelper(WorldModel world, Entity target, EventScheduler scheduler){
+            return true;
+    }
 
-                if (!getPosition().equals(nextPos)) {
-                    Optional<Entity> occupant = world.getOccupant(nextPos);
-                    if (occupant.isPresent()) {
-                        scheduler.unscheduleAllEvents(occupant.get());
-                    }
-
-                    world.moveEntity(this, nextPos);
-                }
-                return false;
-            }
-        }
-
+    protected void _transformDudeHelper(WorldModel world, EventScheduler scheduler, ImageStore imageStore) {
+        AnimationEntity miner = Factory.createDudeNotFull(getId(),
+                getPosition(), getActionPeriod(),
+                getAnimationPeriod(),
+                getResourceLimit(),
+                getImages());
+    }
 }
 

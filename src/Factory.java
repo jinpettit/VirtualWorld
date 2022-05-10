@@ -55,8 +55,7 @@ public class Factory {
             int resourceLimit,
             List<PImage> images)
     {
-        return new Dude_Not_Full( id, position, images, resourceLimit, 0,
-                actionPeriod, animationPeriod);
+        return new Dude_Not_Full(id, position, images, animationPeriod, actionPeriod, resourceLimit, 0);
     }
 
     // don't technically need resource count ... full
@@ -67,8 +66,7 @@ public class Factory {
             int animationPeriod,
             int resourceLimit,
             List<PImage> images) {
-        return new Dude_Full(id, position, images, resourceLimit,
-                actionPeriod, animationPeriod);
+        return new Dude_Full(id, position, images, animationPeriod, actionPeriod,resourceLimit);
     }
 
     public static Entity createHouse(
