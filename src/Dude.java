@@ -15,5 +15,4 @@ public abstract class Dude extends Position {
     }
 
     protected abstract boolean transform(WorldModel world, EventScheduler scheduler, ImageStore imageStore);
-
 }

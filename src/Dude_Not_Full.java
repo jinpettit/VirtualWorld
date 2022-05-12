@@ -38,41 +38,23 @@ public class Dude_Not_Full extends Dude {
             WorldModel world,
             EventScheduler scheduler,
             ImageStore imageStore) {
-        if (this.resourceCount >= getResourceLimit()) {
-            AnimationEntity miner = Factory.createDudeFull(getId(),
-                    getPosition(), getActionPeriod(),
-                    getAnimationPeriod(),
-                    getResourceLimit(),
-                    getImages());
+            if (this.resourceCount >= getResourceLimit()) {
+                AnimationEntity miner = Factory.createDudeFull(getId(),
+                        getPosition(), getActionPeriod(),
+                        getAnimationPeriod(),
+                        getResourceLimit(),
+                        getImages());
 
-            world.removeEntity(this);
-            scheduler.unscheduleAllEvents(this);
+                world.removeEntity(this);
+                scheduler.unscheduleAllEvents(this);
 
-            world.addEntity(miner);
-            miner.scheduleActions(scheduler, world, imageStore);
+                world.addEntity(miner);
+                miner.scheduleActions(scheduler, world, imageStore);
 
-            return true;
-        }
-
-        return false;
-    }
-
-    public Point nextPosition(
-            WorldModel world, Point destPos) {
-        int horiz = Integer.signum(destPos.x - getPosition().x);
-        Point newPos = new Point(getPosition().x + horiz, getPosition().y);
-
-        if (horiz == 0 || world.isOccupied(newPos) && world.getOccupancyCell(newPos).getClass() != Stump.class) {
-            int vert = Integer.signum(destPos.y - getPosition().y);
-            newPos = new Point(getPosition().x, getPosition().y + vert);
-
-            if (vert == 0 || world.isOccupied(newPos) && world.getOccupancyCell(newPos).getClass() != Stump.class) {
-                newPos = getPosition();
+                return true;
             }
+            return false;
         }
-
-        return newPos;
-    }
 
     protected boolean _moveToHelper(WorldModel world, Entity target, EventScheduler scheduler) {
         this.resourceCount += 1;
@@ -82,5 +64,13 @@ public class Dude_Not_Full extends Dude {
         } else
             return false;
     }
+
+    protected boolean _nextPositionHelper(WorldModel world, Point destPos) {
+        int horiz = Integer.signum(destPos.x - getPosition().x);
+        Point newPos = new Point(getPosition().x + horiz, getPosition().y);
+
+        return world.getOccupancyCell(newPos).getClass() != Stump.class;
+    }
+
 
 }

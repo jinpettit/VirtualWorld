@@ -8,7 +8,22 @@ public abstract class Position extends ActionEntity {
         super(id, position, images, animationPeriod, actionPeriod);
     }
 
-    public abstract Point nextPosition(WorldModel world, Point destPos);
+    public Point nextPosition(
+            WorldModel world, Point destPos) {
+        int horiz = Integer.signum(destPos.x - getPosition().x);
+        Point newPos = new Point(getPosition().x + horiz, getPosition().y);
+
+        if (horiz == 0 || world.isOccupied(newPos) && _nextPositionHelper(world, destPos)) {
+            int vert = Integer.signum(destPos.y - getPosition().y);
+            newPos = new Point(getPosition().x, getPosition().y + vert);
+
+            if (vert == 0 || world.isOccupied(newPos) && _nextPositionHelper(world, destPos)) {
+                newPos = getPosition();
+            }
+        }
+
+        return newPos;
+    }
 
     public boolean moveTo(
             WorldModel world,
@@ -33,4 +48,6 @@ public abstract class Position extends ActionEntity {
     }
 
     protected abstract boolean _moveToHelper(WorldModel world, Entity target, EventScheduler scheduler);
+
+    protected abstract boolean _nextPositionHelper(WorldModel world, Point destPos);
 }

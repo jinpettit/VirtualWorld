@@ -39,27 +39,14 @@ public class Fairy extends Position{
                     getActionPeriod());
         }
 
-        public Point nextPosition(
-                WorldModel world, Point destPos)
-        {
-            int horiz = Integer.signum(destPos.x - getPosition().x);
-            Point newPos = new Point(getPosition().x + horiz, getPosition().y);
-
-            if (horiz == 0 || world.isOccupied(newPos) ) {
-                int vert = Integer.signum(destPos.y - getPosition().y);
-                newPos = new Point(getPosition().x, getPosition().y + vert);
-
-                if (vert == 0 || world.isOccupied(newPos)) {
-                    newPos = getPosition();
-                }
-            }
-
-            return newPos;
-        }
 
     protected boolean _moveToHelper(WorldModel world, Entity target, EventScheduler scheduler){
         world.removeEntity(target);
         scheduler.unscheduleAllEvents(target);
         return true;
+    }
+
+    protected boolean _nextPositionHelper(WorldModel world, Point destPos) {
+            return true;
     }
 }
