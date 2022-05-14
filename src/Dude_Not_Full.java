@@ -66,10 +66,7 @@ public class Dude_Not_Full extends Dude {
     }
 
     protected boolean _nextPositionHelper(WorldModel world, Point destPos) {
-        int horiz = Integer.signum(destPos.x - getPosition().x);
-        Point newPos = new Point(getPosition().x + horiz, getPosition().y);
-
-        return world.getOccupancyCell(newPos).getClass() != Stump.class;
+        return world.getOccupancyCell(destPos).getClass() != Stump.class;
     }
 
 

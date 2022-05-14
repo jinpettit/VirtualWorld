@@ -13,11 +13,11 @@ public abstract class Position extends ActionEntity {
         int horiz = Integer.signum(destPos.x - getPosition().x);
         Point newPos = new Point(getPosition().x + horiz, getPosition().y);
 
-        if (horiz == 0 || world.isOccupied(newPos) && _nextPositionHelper(world, destPos)) {
+        if (horiz == 0 || world.isOccupied(newPos) && _nextPositionHelper(world, newPos)) {
             int vert = Integer.signum(destPos.y - getPosition().y);
             newPos = new Point(getPosition().x, getPosition().y + vert);
 
-            if (vert == 0 || world.isOccupied(newPos) && _nextPositionHelper(world, destPos)) {
+            if (vert == 0 || world.isOccupied(newPos) && _nextPositionHelper(world, newPos)) {
                 newPos = getPosition();
             }
         }
