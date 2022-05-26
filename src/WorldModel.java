@@ -38,7 +38,7 @@ final class WorldModel {
             Arrays.fill(this.background[row], defaultBackground);
         }
     }
-    private boolean withinBounds(Point pos) {
+    public boolean withinBounds(Point pos) {
         return pos.y >= 0 && pos.y < this.numRows && pos.x >= 0
                 && pos.x < this.numCols;
     }

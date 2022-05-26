@@ -66,6 +66,8 @@ public class Dude_Not_Full extends Dude {
     }
 
     protected boolean _nextPositionHelper(WorldModel world, Point destPos) {
+        if (world.getOccupancyCell(destPos) == null)
+            return true;
         return world.getOccupancyCell(destPos).getClass() != Stump.class;
     }
 

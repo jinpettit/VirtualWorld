@@ -2,6 +2,8 @@ import processing.core.PImage;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 
 public abstract class Position extends ActionEntity {
     public Position(String id, Point position, List<PImage> images, int animationPeriod, int actionPeriod) {
@@ -9,20 +11,18 @@ public abstract class Position extends ActionEntity {
     }
 
     public Point nextPosition(
-            WorldModel world, Point destPos) {
-        int horiz = Integer.signum(destPos.x - getPosition().x);
-        Point newPos = new Point(getPosition().x + horiz, getPosition().y);
+           WorldModel world, Point destPos) {
 
-        if (horiz == 0 || world.isOccupied(newPos) && _nextPositionHelper(world, newPos)) {
-            int vert = Integer.signum(destPos.y - getPosition().y);
-            newPos = new Point(getPosition().x, getPosition().y + vert);
+        PathingStrategy strategy = new AStarPathingStrategy();
+        Predicate<Point> canPassThrough = p -> ((world.withinBounds(p)) && (!(world.isOccupied(p)) || !_nextPositionHelper(world, p)));
+        BiPredicate<Point, Point> withinReach = (p1, p2) -> (p1.adjacent(p2));
+        List<Point> list = strategy.computePath(getPosition(), destPos, canPassThrough, withinReach, PathingStrategy.CARDINAL_NEIGHBORS);
 
-            if (vert == 0 || world.isOccupied(newPos) && _nextPositionHelper(world, newPos)) {
-                newPos = getPosition();
-            }
+        if (list.size() == 0) {
+            return this.getPosition();
         }
 
-        return newPos;
+        return list.get(0);
     }
 
     public boolean moveTo(
