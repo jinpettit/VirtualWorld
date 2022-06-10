@@ -1,8 +1,8 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
-import java.util.Scanner;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import processing.core.*;
 
@@ -34,6 +34,12 @@ public final class VirtualWorld extends PApplet
     public static final double FAST_SCALE = 0.5;
     public static final double FASTER_SCALE = 0.25;
     public static final double FASTEST_SCALE = 0.10;
+
+    private static final int GHOST_ANIMATION_PERIOD = 200;
+    private static final int GHOST_ACTION_PERIOD = 5;
+
+    private static final int KNIGHT_ANIMATION_PERIOD = 225;
+    private static final int KNIGHT_ACTION_PERIOD = 5;
 
     public static double timeScale = 1.0;
 
@@ -82,15 +88,64 @@ public final class VirtualWorld extends PApplet
     // Just for debugging and for P5
     public void mousePressed() {
         Point pressed = mouseToPoint(mouseX, mouseY);
-        System.out.println("CLICK! " + pressed.x + ", " + pressed.y);
+        // System.out.println(pressed);
 
-        Optional<Entity> entityOptional = world.getOccupant(pressed);
-        if (entityOptional.isPresent())
-        {
-            Entity entity = entityOptional.get();
-            System.out.println(entity.getId() + ": " + entity.getClass());
+        Point p2 = new Point(pressed.x+1, pressed.y);
+        Point p3 = new Point(pressed.x-1, pressed.y);
+        Point p4 = new Point(pressed.x, pressed.y-1);
+        Point p5 = new Point(pressed.x, pressed.y+1);
+        Point p6 = new Point(pressed.x+1, pressed.y-1);
+        Point p7 = new Point(pressed.x+1, pressed.y+1);
+        Point p8 = new Point(pressed.x-1, pressed.y-1);
+        Point p9 = new Point(pressed.x-1, pressed.y+1);
+
+        List<Point> points = new ArrayList<>();
+        points.add(pressed);
+        points.add(p2);
+        points.add(p3);
+        points.add(p4);
+        points.add(p5);
+        points.add(p6);
+        points.add(p7);
+        points.add(p8);
+        points.add(p9);
+
+        List<Point> valid = points.stream().filter(p -> world.withinBounds(p)).collect(Collectors.toList());
+
+        for (Point p: valid) {
+            
+            world.setBackground(p, new Background("stone", imageStore.getImageList("stone")));
+
+            if (world.isOccupied(p) && world.getOccupancyCell(p).getClass() == Tree.class) {
+                ((Tree) world.getOccupant(p).get()).setHealth(0);
+            }
+            
+            if (world.isOccupied(p) && world.getOccupancyCell(p).getClass() == Dude_Full.class || world.isOccupied(p) && world.getOccupancyCell(p).getClass() == Dude_Not_Full.class)  {
+                ActionEntity knight = Factory.createKnight("knight", p,KNIGHT_ACTION_PERIOD , KNIGHT_ANIMATION_PERIOD, imageStore.getImageList(Parse.KNIGHT_KEY));
+                world.removeEntity(world.getOccupant(p).get());
+
+                world.addEntity(knight);
+                knight.scheduleActions(scheduler, world, imageStore);
+            } 
         }
 
+        eventNewEntity(pressed);
+
+        // Optional<Entity> entityOptional = world.getOccupant(pressed);
+        // if (entityOptional.isPresent())
+        // {
+        //     Entity entity = entityOptional.get();
+        //     // System.out.println(entity.getClass());
+        // }
+
+    }
+
+    private void eventNewEntity(Point pressed) {
+        AnimationEntity ghost = Factory.createGhost("ghost", pressed,GHOST_ACTION_PERIOD, GHOST_ANIMATION_PERIOD,
+                imageStore.getImageList(Parse.GHOST_KEY));
+
+        world.addEntity(ghost);
+        ghost.scheduleActions(scheduler, world, imageStore);
     }
 
     private Point mouseToPoint(int x, int y)

@@ -48,6 +48,22 @@ public class Parse {
     private static final int FAIRY_ANIMATION_PERIOD = 4;
     private static final int FAIRY_ACTION_PERIOD = 5;
 
+    public static final String GHOST_KEY = "ghost";
+    private static final int GHOST_NUM_PROPERTIES = 6;
+    private static final int GHOST_ID = 1;
+    private static final int GHOST_COL = 2;
+    private static final int GHOST_ROW = 3;
+    private static final int GHOST_ANIMATION_PERIOD = 4;
+    private static final int GHOST_ACTION_PERIOD = 5;
+
+    public static final String KNIGHT_KEY = "knight";
+    private static final int KNIGHT_NUM_PROPERTIES = 6;
+    private static final int KNIGHT_ID = 1;
+    private static final int KNIGHT_COL = 2;
+    private static final int KNIGHT_ROW = 3;
+    private static final int KNIGHT_ANIMATION_PERIOD = 4;
+    private static final int KNIGHT_ACTION_PERIOD = 5;
+
     public static final String STUMP_KEY = "stump";
 
     public static final String TREE_KEY = "tree";
@@ -197,6 +213,40 @@ public class Parse {
         }
     }
 
+    public static boolean parseGhost(
+            String[] properties, WorldModel world, ImageStore imageStore)
+    {
+        if (properties.length == GHOST_NUM_PROPERTIES) {
+            Point pt = new Point(Integer.parseInt(properties[GHOST_COL]),
+                    Integer.parseInt(properties[GHOST_ROW]));
+            AnimationEntity entity = Factory.createGhost(properties[GHOST_ID],
+                    pt,
+                    Integer.parseInt(properties[GHOST_ACTION_PERIOD]),
+                    Integer.parseInt(properties[GHOST_ANIMATION_PERIOD]),
+                    imageStore.getImageList(GHOST_KEY));
+            world.tryAddEntity(entity);
+        }
+
+        return properties.length == GHOST_NUM_PROPERTIES;
+    }
+
+    public static boolean parseKnight(
+            String[] properties, WorldModel world, ImageStore imageStore)
+    {
+        if (properties.length == KNIGHT_NUM_PROPERTIES) {
+            Point pt = new Point(Integer.parseInt(properties[KNIGHT_COL]),
+                    Integer.parseInt(properties[KNIGHT_ROW]));
+            AnimationEntity entity = Factory.createKnight(properties[KNIGHT_ID],
+                    pt,
+                    Integer.parseInt(properties[KNIGHT_ACTION_PERIOD]),
+                    Integer.parseInt(properties[KNIGHT_ANIMATION_PERIOD]),
+                    imageStore.getImageList(KNIGHT_KEY));
+            world.tryAddEntity(entity);
+        }
+
+        return properties.length == KNIGHT_NUM_PROPERTIES;
+    }
+
 
 
     private static boolean processLine(
@@ -219,6 +269,10 @@ public class Parse {
                     return parseTree(properties, world, imageStore);
                 case SAPLING_KEY:
                     return parseSapling(properties, world, imageStore);
+                case GHOST_KEY:
+                    return parseGhost(properties, world, imageStore);
+                case KNIGHT_KEY:
+                    return parseKnight(properties, world, imageStore);
             }
         }
 

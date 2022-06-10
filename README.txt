@@ -18,7 +18,7 @@ There are 8 entities, which act according to the following rules:
       moving to multiple TREEs or SAPLINGs if necessary.
     * transforms into a DUDE_FULL once it hits it's resource limit
 4. OBSTACLE
-    * the water - entites cannot move through it
+    * the water - entities cannot move through it
     * the water is not just a background image as it blocks entity paths
 5. FAIRY
     * navigates towards the nearest stump and turns it into a SAPLING

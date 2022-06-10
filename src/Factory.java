@@ -92,4 +92,25 @@ public class Factory {
         return new Fairy(id, position, images,
                 actionPeriod, animationPeriod);
     }
+
+    public static ActionEntity createGhost(
+            String id,
+            Point position,
+            int actionPeriod,
+            int animationPeriod,
+            List<PImage> images)
+    {
+        return new Ghost(id, position, images,
+                actionPeriod, animationPeriod);
+    }
+    public static ActionEntity createKnight(
+            String id,
+            Point position,
+            int actionPeriod,
+            int animationPeriod,
+            List<PImage> images)
+    {
+        return new Knight(id, position, images,
+                actionPeriod, animationPeriod);
+    }
 }

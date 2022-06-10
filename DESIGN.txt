@@ -1,61 +1,6 @@
-contains
+Overall the refactoring of the project was straightforward for most of the methods.
 
-1.Viewport class
-2.It uses variables from both the Viewport class and Point class, but it refers more to the Viewport class
-
-parseBackground
-parseSapling
-parseDude 
-parseFairy 
-parseTree
-parseObstacle 
-parseHouse   
-
-1.WorldModel class 
-2.These methods use setBackground or tryAddEntity, and after moving those to the WorldModel class,
-those methods should be moved as well cause it calls it from the WorldModel class
-
-tryAddEntity
-
-1.WorldModel class     
-2.It uses addEntity method which was moved to the WorldModel class
-
-findNearest
-1.WorldModel class 
-2.Even though it refers more to the Point class, the methods that are moved to the WorldModel class
-refers calls these method often
-
-isOccupied   
-nearestEntity
-1. WorldModel class  
-2. The methods that are moved to the WorldModel classrefers calls these method often   
-
-moveEntity
-removeEntity
-removeEntityAt   
-1.WorldModel class 
-2.Even though it refers more to the Entity class, the methods that are moved to the WorldModel class
-refers calls these method often  
-
-createActivityAction
-createAnimationAction
-1. Entity Class
-2. Used by scheduleActions method which belongs in the Entity class
-
-createTree
-createDudeNotFull
-1. Entity Class
-2. It could be placed in either WorldModel or Entity because it's used by both
-tranformFull (Entity class) and theparseDude (WorldModel class)
-
-createHouse
-createObstacle
-createFairy
-1. WorldModel Class
-2. Only used by it's corresponding parse methods which is in the WorldModel class
-
-createStump
-createSapling
-createDudeFull
-1. Entity Class
-2. Only used by the tranform methods which is in the Entity class
+However there are few functions that I am unsure of:
+- getNumFromRange in Entity -> made non static since it is only used in the class itself
+- nearestEntity in Entity -> made static because it does not seem to use the instance vars of the class
+- clamp in WorldView -> made non static since it is only used in the WorldView class
